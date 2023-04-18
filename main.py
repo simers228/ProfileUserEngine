@@ -18,7 +18,8 @@ from bs4 import BeautifulSoup
 
 PATH_TO_CHROMEDRIVER = 'C:\\Users\\ssingh\\Downloads\\chromedriver_win32\\chromedriver.exe'
 LOGIN_NAME = 'simers228@gmail.com'
-LOGIN_PASSWORD = '[Password]'
+
+LOGIN_PASSWORD = [PASSWORD]
 RESULTS_FILE_NAME = 'output'
 LINKEDIN_URL = 'https://www.linkedin.com'
 
@@ -97,6 +98,9 @@ class LinkedInScrapper:
             sleep(2)
         except:
             print('LOGIN FAILED')
+    import re
+    import time
+
 
     def search_profiles(self):
         '''
@@ -104,13 +108,37 @@ class LinkedInScrapper:
         '''
         try:
             sleep(2)
+            # Assuming you already have your webdriver instance as 'self.driver' and WebDriverWait as 'self.wait'
+
+            # Navigate directly to the company "People" page
+            company_url = "https://www.linkedin.com/company/sampson-construction"
+            people_url = company_url + "/people/"
+            self.driver.get(people_url)
+
+            """
+            # Wait for the "People" page to load (optional)
+            self.wait.until(EC.visibility_of_element_located((By.XPATH, "//div[contains(@class, 'org-people-search')]")))
+
             search_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//input[@placeholder='Search']")))
-            #search_button.send_keys('Alex Rasmussen')
+            search_button.send_keys('Sampson Construction Co')
             search_button.send_keys(Keys.RETURN)
+            # Wait for the search results to load
+            self.wait.until(EC.visibility_of_element_located((By.XPATH, "//span[contains(@class, 'entity-result__title-text')]//a[@data-test-app-aware-link]")))
+
+            # Click on the first search result
+            first_result = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//span[contains(@class, 'entity-result__title-text')]//a[@data-test-app-aware-link][1]")))
+            first_result.click()
             sleep(2)
-            ppl_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[text()='People']")))
-            ppl_button.click()
-            sleep(1)
+
+            self.wait.until(EC.visibility_of_element_located((By.XPATH, "//div[contains(@class, 'org-top-card')]")))
+
+            # Click on the "People" element
+            people_link = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//a[contains(@class, 'org-page-navigation__item-anchor') and contains(text(), 'People')]")))
+            people_link.click()
+
+            # Wait for the "People" page to load (optional)
+            self.wait.until(EC.visibility_of_element_located((By.XPATH, "//div[contains(@class, 'org-people-search')]")))
+
             connections_button = self.wait.until(
                 EC.element_to_be_clickable((By.XPATH, "//button[text()='Connections']")))
             connections_button.click()
@@ -127,9 +155,9 @@ class LinkedInScrapper:
             sleep(3)
             #profile_link = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//span[contains(@class, 'entity-result__title-text')]//a")))
             #profile_link.click()
+            """
         except:
             print('SEARCH FAILED')
-    
 
     def get_about_info(self, sel):
         """
@@ -588,58 +616,48 @@ class LinkedInScrapper:
         f = open(self.results_file_name, 'w')
         writer = csv.writer(f)
         writer.writerow(self.column_names)
-        
-        # scroll the page to identify the number of batches
-        self.driver.execute_script("window.scrollTo({'top': 900, 'left': 0, 'behavior': 'smooth'})")
-        sleep(2)
-        number_of_batches = self.wait.until(EC.presence_of_element_located((By.XPATH,
-                                                                            '(//ul[contains(@class, "pagination")]/li)[last()]'))).text
-        number_of_batches = int(number_of_batches)
-        print(number_of_batches)
-        #self.driver.execute_script("window.scrollTo({'top': 0, 'left': 0, 'behavior': 'smooth'})")
-        sleep(2)
 
         all_usernames = []
 
-        # Loop through all pages
-        for batch in range(1, number_of_batches + 1):
-            # Fetch the HTML content
-            html_content = self.driver.page_source
+        last_height = self.driver.execute_script("return document.body.scrollHeight")
 
-            # Parse the HTML content with BeautifulSoup
-            soup = BeautifulSoup(html_content, 'html.parser')
-            self.driver.execute_script("window.scrollTo({'top': 900, 'left': 0, 'behavior': 'smooth'})")
-            # Find all the profile links
-            profile_links = soup.find_all('a', {'class': 'app-aware-link'})
+        while True:
+            # Scroll down to the bottom of the page
+            self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
-            # Extract the usernames from the links
-            usernames = []
-            for link in profile_links:
-                href_value = link['href']
-                url_parts = href_value.split('/')
-                username = url_parts[-1].split('?')[0]
-                usernames.append(username)
+            # Wait for the new profiles to load
+            sleep(3)  # Adjust this value based on the loading time of the profiles
 
-            # Filter and append the usernames to the all_usernames list
-            filtered_list = [s for s in usernames if s and not s.startswith('ACo')]
-            unique_list = list(set(filtered_list))
-            all_usernames.extend(unique_list)
-            print(f"Page {batch}: {unique_list}")
+            # Get the new scroll height after loading new profiles
+            new_height = self.driver.execute_script("return document.body.scrollHeight")
 
-            # Navigate to the next page if it's not the last page
-            if batch < number_of_batches:
-                next_page_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, '//button[@aria-label="Next"]')))
-                next_page_button.click()
-                sleep(3)
+            # If the scroll height hasn't changed, it means there are no more profiles left to load
+            if new_height == last_height:
+                break
+
+            last_height = new_height
+
+        # Find all the profile links
+        profile_links = self.wait.until(EC.visibility_of_all_elements_located((By.XPATH, "//a[contains(@class, 'app-aware-link') and contains(@href, '/in/')]")))
+
+        # Extract the usernames from the links
+        for link in profile_links:
+            href_value = link.get_attribute('href')
+            url_parts = href_value.split('/')
+            username = url_parts[-1].split('?')[0]
+            all_usernames.append(username)
+
+            # Print the username
+            print("Username:", username)
 
         # Print the list of usernames from all pages
         print("All usernames:", all_usernames)
 
-        for i in range(1, number_of_batches + 1):
-            print("Processing batch number: ", i)
         f.close()
 
         print('Crawling successfully completed!')
+
+
 
     def remove_duplicates(self):
         file_name = self.results_file_name
@@ -662,6 +680,7 @@ crawler.process()
 # remove duplicates
 crawler.remove_duplicates()
 
+sleep(10)
 driver.quit()
 
 """ =================================================================================================================== 
