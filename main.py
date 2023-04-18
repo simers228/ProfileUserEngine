@@ -18,7 +18,8 @@ from bs4 import BeautifulSoup
 
 PATH_TO_CHROMEDRIVER = 'C:\\Users\\ssingh\\Downloads\\chromedriver_win32\\chromedriver.exe'
 LOGIN_NAME = 'simers228@gmail.com'
-LOGIN_PASSWORD = "Qwe123?!'"
+
+LOGIN_PASSWORD = [PASSWORD]
 RESULTS_FILE_NAME = 'output'
 LINKEDIN_URL = 'https://www.linkedin.com'
 
