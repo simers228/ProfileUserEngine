@@ -1,4 +1,4 @@
-import parameters
+from pipi import parameters
 import pandas as pd
 
 

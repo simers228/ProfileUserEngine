@@ -2,7 +2,6 @@
 # !brew install chromedriver
 # update your Chrome version
 
-import parameters
 import requests, sys
 import csv
 import random

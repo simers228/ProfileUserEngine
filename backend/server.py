@@ -10,7 +10,7 @@ def server():
         subprocess.run(['python', 'project\backend\ProfileUserEngine-main\main.py', URL])
         return 'Search Began'
     else:
-        return 'fail'
+        return 'Failure'
 
 
 
