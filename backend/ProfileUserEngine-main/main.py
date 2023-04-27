@@ -1,7 +1,3 @@
-# !pip install selenium
-# !brew install chromedriver
-# update your Chrome version
-
 import requests, sys
 import csv
 import random
@@ -15,7 +11,7 @@ from parsel import Selector
 from time import sleep
 from bs4 import BeautifulSoup
 
-PATH_TO_CHROMEDRIVER = 'C:\\Users\\ssingh\\Downloads\\chromedriver_win32\\chromedriver.exe'
+PATH_TO_CHROMEDRIVER = '..\..\chromedriver.exe'
 LOGIN_NAME = 'simers228@gmail.com'
 
 LOGIN_PASSWORD = [PASSWORD]
@@ -110,7 +106,7 @@ class LinkedInScrapper:
             # Assuming you already have your webdriver instance as 'self.driver' and WebDriverWait as 'self.wait'
 
             # Navigate directly to the company "People" page
-            company_url = "https://www.linkedin.com/company/sampson-construction/"
+            company_url = sys.argv[1]
             people_url = company_url + "/people/"
             self.driver.get(people_url)
 
@@ -248,7 +244,6 @@ sleep(10)
 driver.quit()
 
 """ =================================================================================================================== 
-
 Improve:
 - Education info
     degree, department - if one is missing we assign the value to degree; make it more precise 
