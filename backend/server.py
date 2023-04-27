@@ -2,7 +2,7 @@ from flask import Flask, request, render_template
 import subprocess
 
 app = Flask(__name__, static_folder="../frontend/build/static", template_folder="../frontend/build")
-
+# DO NOT FORGET TO ADD TEXT FILTERING TO AVOID INJECTION
 @app.route('/', methods=['GET', 'POST'])
 def server():
     if request.method == 'POST':

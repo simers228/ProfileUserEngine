@@ -1,7 +1,7 @@
 body {
   background-color: rgb(68, 70, 84);
 }
-.center {
+/*.center {
   margin: auto;
   width: 50%;
   border: 3px solid green;
@@ -17,4 +17,75 @@ body {
 
 .textbox {
   text-align: center;
+}
+*/
+.header {
+  display: flex;
+  flex-direction: row;
+  height: 100px;
+  background-color: rgb(255, 255, 255);
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  border: 3px solid green;
+}
+
+.banner {
+  height: 80px;
+}
+
+@media only screen and (max-width: 480px) {
+  body {
+    font-size: 16px;
+  }
+  .container {
+    width: 100%;
+    margin: 0 auto;
+  }
+}
+@media only screen and (min-width: 481px) and (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+  .container {
+    width: 100%;
+    padding: 10px;
+  }
+}
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+  body {
+    font-size: 14px;
+  }
+  .container {
+    width: 100%;
+    padding: 10px;
+  }
+}
+@media only screen and (min-width: 1025px) and (max-width: 1200px) {
+  body {
+    font-size: 14px;
+  }
+  .container {
+    width: 100%;
+    padding: 10px;
+  }
+}
+@media only screen and (min-width: 1201px) and (max-width: 1440px) {
+  body {
+    font-size: 14px;
+  }
+  .container {
+    width: 100%;
+    padding: 10px;
+  }
+}
+@media only screen and (min-width: 1441px) {
+  body {
+    font-size: 14px;
+  }
+  .container {
+    width: 100%;
+    padding: 10px;
+  }
 }

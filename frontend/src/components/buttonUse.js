@@ -2,6 +2,7 @@ import React from "react";
 function ButtonUse() {
   return (
     <div className="center textbox">
+      Insert Linkedin URL
       <form action="http://localhost:5000" method="POST">
         <input
           placeholder="https://linkedin.com"
