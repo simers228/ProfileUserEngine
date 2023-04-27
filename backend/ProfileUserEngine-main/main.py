@@ -1,4 +1,4 @@
-import requests, sys
+import sys
 import csv
 import random
 import pandas as pd
