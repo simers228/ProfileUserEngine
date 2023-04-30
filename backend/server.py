@@ -7,7 +7,7 @@ app = Flask(__name__, static_folder="../frontend/build/static", template_folder=
 def server():
     if request.method == 'POST':
         URL = request.form['linkedinUrl']
-        subprocess.run(['python', '.\ProfileUserEngine-main\main.py', URL])
+        subprocess.run(['python', './ProfileUserEngine-main/main.py', URL])
         return render_template("index.html")
     else:
         return 'Failure'
