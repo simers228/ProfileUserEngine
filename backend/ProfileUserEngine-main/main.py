@@ -213,6 +213,12 @@ class LinkedInScrapper:
 
         # Print the list of usernames from all pages
         print("All usernames:", all_usernames)
+        with open('usernames.txt', 'w') as usernames_file:
+            # Deduplicate the list using a set and sort it
+            unique_usernames = sorted(set(all_usernames))
+
+            # Write the usernames as a comma-separated list of strings
+            usernames_file.write(', '.join(f'"{username}"' for username in unique_usernames))
 
         f.close()
 
