@@ -9,7 +9,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from parsel import Selector
 from time import sleep
-from bs4 import BeautifulSoup
 
 PATH_TO_CHROMEDRIVER = '..\..\chromedriver.exe'
 LOGIN_NAME = 'simers228@gmail.com'
