@@ -7,7 +7,7 @@ function Locations() {
         <input
           placeholder="Illinois/Chicago"
           type="text"
-          name="linkedinUrl"
+          name="locationQualifier"
         ></input>
         <input type="submit" value="Submit"></input>
       </form>

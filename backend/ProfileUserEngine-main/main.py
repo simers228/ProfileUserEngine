@@ -1,6 +1,8 @@
 import sys
 import csv
 import random
+import re
+import time
 import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -10,8 +12,11 @@ from selenium.webdriver.common.keys import Keys
 from parsel import Selector
 from time import sleep
 
+USERNAME = 'calvinsopocy@gmail.com'
+PASSWORD = '6mNnjNL?ha,//$z'
+
 PATH_TO_CHROMEDRIVER = '..\..\chromedriver.exe'
-LOGIN_NAME = 'simers228@gmail.com'
+LOGIN_NAME = [USERNAME]
 
 LOGIN_PASSWORD = [PASSWORD]
 RESULTS_FILE_NAME = 'output'
@@ -92,8 +97,7 @@ class LinkedInScrapper:
             sleep(2)
         except:
             print('LOGIN FAILED')
-    import re
-    import time
+
 
 
     def search_profiles(self):
@@ -213,12 +217,6 @@ class LinkedInScrapper:
 
         # Print the list of usernames from all pages
         print("All usernames:", all_usernames)
-        with open('usernames.txt', 'w') as usernames_file:
-            # Deduplicate the list using a set and sort it
-            unique_usernames = sorted(set(all_usernames))
-
-            # Write the usernames as a comma-separated list of strings
-            usernames_file.write(', '.join(f'"{username}"' for username in unique_usernames))
 
         f.close()
 

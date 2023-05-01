@@ -5,6 +5,7 @@ function Header() {
       <img
         src={process.env.PUBLIC_URL + "/banner.png"}
         className="banner"
+        alt="Sequoia Recruitment"
       ></img>
     </div>
   );
