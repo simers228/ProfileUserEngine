@@ -1,18 +1,20 @@
 import React from "react";
-function Locations() {
+export default function Locations({ setLocations }) {
+  const handleLocationChange = (event) => {
+    setLocations(event.target.value);
+  };
   return (
-    <div className="center textbox">
-      Insert Linkedin URL
-      <form action="http://localhost:5000" method="POST">
+    <div>
+      <div className="textTitle">Insert State or City (OPTIONAL)</div>
+      <form>
         <input
+          className="textbox textbox2"
           placeholder="Illinois/Chicago"
           type="text"
-          name="locationQualifier"
+          name="location"
+          onChange={handleLocationChange}
         ></input>
-        <input type="submit" value="Submit"></input>
       </form>
     </div>
   );
 }
-
-export default Locations;

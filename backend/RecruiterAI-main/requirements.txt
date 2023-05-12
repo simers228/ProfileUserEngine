@@ -1,0 +1,8 @@
+itemadapter==0.8.0
+Scrapy==2.8.0
+scrapeops_scrapy==0.5.2
+scrapeops_scrapy_proxy_sdk==1.0
+pandas==2.0.0
+numpy==1.24.3
+Flask==2.2.3
+nbconvert==7.3.1
