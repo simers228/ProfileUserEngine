@@ -1,7 +1,7 @@
 import React from "react";
-function Header() {
+export default function Header() {
   return (
-    <div className=" header">
+    <div className="header">
       <img
         src={process.env.PUBLIC_URL + "/banner.png"}
         className="banner"
@@ -10,4 +10,3 @@ function Header() {
     </div>
   );
 }
-export default Header;

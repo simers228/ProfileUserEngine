@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import Locations from "./locations.js";
+import Location from "./location.js";
 import JobPositions from "./jobPositions.js";
 import JobDescription from "./jobDescription";
 import Domain from "./domain.js";
 
 export default function RecruiterOptions() {
   const [jobPosition, setJobPosition] = useState("");
-  const [location, setLocations] = useState("");
+  const [location, setLocation] = useState("");
   const [domain, setDomain] = useState("");
   const [jobDescription, setJobDescription] = useState("");
 
@@ -37,6 +37,7 @@ export default function RecruiterOptions() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "X-Request-ID": "User-Input",
         },
         body: JSON.stringify(requestBody),
       });
@@ -46,7 +47,6 @@ export default function RecruiterOptions() {
       console.error(error);
     }
   };
-
   return (
     <div>
       <div className="prompts row">
@@ -54,7 +54,7 @@ export default function RecruiterOptions() {
           <JobPositions setJobPosition={handleJobPositionChange} />
         </div>
         <div className="container2">
-          <Locations setLocations={setLocations} />
+          <Location setLocation={setLocation} />
         </div>
         <div>
           <Domain setDomain={setDomain} />
@@ -64,7 +64,7 @@ export default function RecruiterOptions() {
         <JobDescription setJobDescription={setJobDescription} />
       </div>
       <div className="button2">
-        <button className="button" onClick={handleSubmit}>
+        <button id="filterButton" className="button" onClick={handleSubmit}>
           Submit
         </button>
       </div>
