@@ -3,23 +3,22 @@ import openai
 import re
 import requests
 class FilterClass:
-    def __init__(self, data_object, location, jobPosition, jobDescription, domain):
+    def __init__(self, data_object, jobPosition, location, jobDescription, domain):
         self.data_object = data_object
-        self.location = location
         self.jobPosition = jobPosition
-        self.JobDescription = jobDescription
+        self.location = location
+        self.jobDescription = jobDescription
         self.domain = domain
-        print(f'{self.data_object} + cunt {self.location} + {self.jobPosition} + {self.domain}')
-    def filter(self):
         openai.organization = "org-5jL307O6H0zk9xntse9BR1sl"
         openai.api_key = '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'
-        df = pd.DataFrame(self.data_object)
+        self.df = pd.DataFrame(self.data_object)
+    def filter(self):
         def extract_company_name(url):
             company_name = re.findall(r'company/(\w+)', url)
             if company_name:
                 return company_name[0]
             return ""
-        for index, row in df.iterrows():
+        for index, row in self.df.iterrows():
             for idx, item in enumerate(row['experience']):
                 company_name = extract_company_name(item['organisation_profile'])
                 del item['organisation_profile']
@@ -30,16 +29,23 @@ class FilterClass:
                     item['organisation_profile'] = company_name
                 
                 row['experience'][idx] = item
-        df['experience'] = df['experience'].apply(lambda dicts: [{k: v for k, v in d.items() if (k != 'location' and k!= 'start_time' and k!= 'end_time')} for d in dicts])
-        df['education'] = df['education'].apply(lambda dicts: [{k: v for k, v in d.items() if (k != 'organisation')} for d in dicts])
+        self.df['experience'] = self.df['experience'].apply(lambda dicts: [{k: v for k, v in d.items() if (k != 'location' and k!= 'start_time' and k!= 'end_time')} for d in dicts])
+        self.df['education'] = self.df['education'].apply(lambda dicts: [{k: v for k, v in d.items() if (k != 'organisation')} for d in dicts])
 
         if self.location != "":
-            df_location = df[df['location'].str.contains(self.location, case=True)]
+            df_location = self.df[self.df['location'].str.contains(self.location, case=False)]
         else:
-            df_location = df[df['location'].str.contains("", case=False)]
+            df_location = self.df
+        if df_location.empty:
+            print("Empty Dataframe")
+            return '0 results'
+        df_location_role= df_location[df_location['description'].str.contains(self.jobPosition, case=False)]
+        if df_location_role.empty:
+            print("Empty Dataframe")
+            return '0 results'
+        print(self.df)
         print(df_location)
-        df_location_role= df_location[df_location['description'].str.contains(self.jobPosition, case=True)]
-        df_location_role
+        print(df_location_role)
         def generate_response(row):
             prompt = (f"Background: \nDesc: {row['description']}\nAbout: {row['about']}\nExp: {row['experience']}\nEdu: {row['education']}\n\n"
                     f"Given the background, rate the match for the following job critically:\n\n{self.jobDescription}\n\n"
@@ -65,11 +71,10 @@ class FilterClass:
         # Generate scores and create a new column with the scores
         df_location_role["score"] = df_location_role.apply(lambda row: generate_response(row), axis=1)
         sorted_df = df_location_role.sort_values(by='score', ascending=False)
-        sorted_df
         filtered_df = sorted_df[sorted_df['score'] >= 8]
-        filtered_df
+        print(filtered_df)
         # Split the full_name column into first_name and last_name
-        filtered_df[['first_name', 'last_name']] = df['name'].str.split(' ', n=1, expand=True)
+        filtered_df[['first_name', 'last_name']] = self.df['name'].str.split(' ', n=1, expand=True)
         columns = filtered_df.columns.tolist()
 
         # Find the index of the 'full_name' column
@@ -83,7 +88,6 @@ class FilterClass:
         # Function to find the email address using the hunter.io API
         def find_email(row):
             url = 'https://api.hunter.io/v2/email-finder'
-            print(self.domain)
             params = {
                 'domain': self.domain,
                 'first_name': row['first_name'],
@@ -210,4 +214,4 @@ class FilterClass:
 
         # Generate emails and create a new column with the emails
         filtered_df["email"] = filtered_df.apply(lambda row: generate_email(row, self.jobDescription), axis=1)
-        filtered_df.to_csv('outreach.csv', index=False)
+        return filtered_df

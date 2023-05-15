@@ -1,4 +1,4 @@
-from flask import Flask, request, Response, jsonify
+from flask import Flask, request, Response, jsonify, send_file
 from scripts.linkedInScraper import LinkedInScraper 
 from scripts.filterCandidates import FilterClass
 #from scrapy.crawler import CrawlerProcess
@@ -7,10 +7,10 @@ from scripts.filterCandidates import FilterClass
 from flask_cors import CORS
 import os
 import subprocess
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 CORS(app, origins=['http://localhost:3000'])
-app.secret_key = 'WebScraping'
 # DO NOT FORGET TO ADD TEXT FILTERING TO AVOID INJECTION
 
 
@@ -21,9 +21,9 @@ def linkedin():
         URL = request.form['linkedinUrl']
         scraper = LinkedInScraper(URL)
         usernames = scraper.process()
+        print(usernames)
         return Response(status=204)
     elif request.method == 'GET':
-        print(usernames)
         return jsonify(usernames)
     return Response(status=204)
 @app.route('/recruiter', methods=['GET', 'POST'])
@@ -42,11 +42,16 @@ def recruiter():
             os.chdir('../')
             return Response(status=204)
         else:
-            print(f'job_position: {job_position}, location: {location}, job_description: {job_description}, domain: {domain} + cunt')
+            job_position = "Project Manager"
+            location = ""
+            job_description = "Hard Working"
+            domain = "sampson-construction.com"
+            print(f'job_position: {job_position}, location: {location}, job_description: {job_description}, domain: {domain}')
             item = request.get_json()
             filterObject = FilterClass(item, job_position, location, job_description, domain)
-            filterObject.filter()
-            return Response(status=204)
+            file = filterObject.filter()
+            file = file.to_csv
+            return send_file(file, attachment_filename='outreach.csv', as_attachment=True)
 @app.route("/")
 def homepage():
     return "hi"
