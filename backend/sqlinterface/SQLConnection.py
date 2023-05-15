@@ -155,7 +155,7 @@ username = 'sequoiauser' # User with CRUD privileges
 password = 'Sequoia_2023' # Make hidden variable asap
 '''
 # Sample code to call the SQL connection
-insertRecruiterOptions = PostgresConnection('sequoiapostgres1.postgres.database.azure.com', 5432,'seq_app','sequoiauser','Sequoia_2023')
+insertRecruiterOptions = PostgresConnection('sequoiapostgres1.postgres.database.azure.com', 5432,'seq_app','sequoiauser','Sequoia_2023') # obfuscate password asap
 insertRecruiterOptions.connect()
 #print(insertRecruiterOptions)
 #result = insertRecruiterOptions.selectStatement('SELECT * from tbl_linkedinexperience;')
