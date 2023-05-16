@@ -126,11 +126,13 @@ class PostgresConnection:
         password = 'Sequoia_2023' # Make hidden variable asap
         '''
 
-        insertRecruiterOptions.connect()
+        self.connect()
         # print(insertRecruiterOptions)
         # result = insertRecruiterOptions.selectStatement('SELECT * from tbl_linkedinexperience;')
-        print(self)
-        insertRecruiterOptions.disconnect()
+        returnStmnt = self.selectStatement(
+            "SELECT * FROM tbl_recruiteroptions;")
+        # returnStmnt = self.selectStatement()
+        self.disconnect()
 
         # updateTable = 'tbl_recruiteroptions'
 
@@ -140,10 +142,10 @@ class PostgresConnection:
         # result = insertRecruiterOptions.insertStatement(
         #     updateTable,  valueList)
         # print(result)
-
-        return 'Functionality added'
+        print(returnStmnt)
+        return returnStmnt
 
 
 # Sample code to call the SQL connection
-# insertRecruiterOptions = PostgresConnection()  # obfuscate password asap
-# insertRecruiterOptions.main()
+insertRecruiterOptions = PostgresConnection()  # obfuscate password asap
+insertRecruiterOptions.main()
