@@ -145,5 +145,5 @@ class PostgresConnection:
 
 
 # Sample code to call the SQL connection
-insertRecruiterOptions = PostgresConnection()  # obfuscate password asap
-insertRecruiterOptions.main()
+# insertRecruiterOptions = PostgresConnection()  # obfuscate password asap
+# insertRecruiterOptions.main()
