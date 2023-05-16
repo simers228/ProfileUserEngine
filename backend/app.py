@@ -41,7 +41,7 @@ def recruiter():
     global job_position, location, job_description, domain
     if request.method == 'POST':
         if request.headers.get('X-Request-ID') == "User-Input":
-            user = 'Calvin'
+            user = 'Calvin1'
             job_position = request.json.get('jobPosition')
             location = request.json.get('location')
             job_description = request.json.get('jobDescription')
@@ -51,7 +51,11 @@ def recruiter():
 
             myConn = PostgresConnection()
             myConn.connect()
-            print(myConn)
+            # print(myConn)
+            updateTable = 'tbl_recruiteroptions'
+            valuesList = [user, job_position,
+                          location, job_description, domain]
+            myConn.insertStatement(updateTable, valuesList)
             myConn.disconnect()
             # user = User(job_position=job_position, location=location,
             #             job_description=job_description, domain=domain)
