@@ -67,14 +67,16 @@ class PostgresConnection:
             if statement == 'SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname != \'pg_catalog\' AND schemaname != \'information_schema\';':
                 # if default statement
                 for db in selectResult:
-                    selectReturn.append(db)  # append to a list
+                    selectReturn.append(db[0].strip())
                 # return list of tables available
-                return 'Choose a table to select from: ' + str(selectReturn)
+                return 'Choose a table to select from: ' + selectReturn
             else:
                 # custom select statement
-                for i in selectResult:
-                    selectReturn.append(i)  # append to a list
-                return str(selectReturn)
+                for line in selectResult:
+                    cleaned_line = [col.strip() if isinstance(
+                        col, str) else col for col in line]
+                    selectReturn.append(cleaned_line)
+                return selectReturn
 
     def updateStatement(self, statement):
         # An update statement that allows for one update query
@@ -130,7 +132,7 @@ class PostgresConnection:
         # print(insertRecruiterOptions)
         # result = insertRecruiterOptions.selectStatement('SELECT * from tbl_linkedinexperience;')
         returnStmnt = self.selectStatement(
-            "SELECT * FROM tbl_recruiteroptions;")
+            "SELECT * FROM tbl_recruiteroptions WHERE charUser = \'Calvin1\';")
         # returnStmnt = self.selectStatement()
         self.disconnect()
 
@@ -142,7 +144,7 @@ class PostgresConnection:
         # result = insertRecruiterOptions.insertStatement(
         #     updateTable,  valueList)
         # print(result)
-        print(returnStmnt)
+        print(returnStmnt[0])
         return returnStmnt
 
 
