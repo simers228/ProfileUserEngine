@@ -41,7 +41,7 @@ def recruiter():
     global job_position, location, job_description, domain
     if request.method == 'POST':
         if request.headers.get('X-Request-ID') == "User-Input":
-            user = 'Calvin3'
+            user = 'Calvin4'
             job_position = request.json.get('jobPosition')
             location = request.json.get('location')
             job_description = request.json.get('jobDescription')
@@ -71,14 +71,14 @@ def recruiter():
             myConn.connect()
             # userList = myConn.selectStatement(f"SELECT * FROM tbl_recruiteroptions where charuser = \'{user}\'")
             userList = myConn.selectStatement(
-                f"SELECT * FROM tbl_recruiteroptions where charuser = \'Calvin3\';")
+                f"SELECT * FROM tbl_recruiteroptions where charuser = \'{user}\';")
 
             myConn.disconnect()
             print("select list return > \n")
             print(userList)
 
-            print(
-                f'job_position: {job_position}, location: {location}, job_description: {job_description}, domain: {domain}')
+            # print(
+            #     f'job_position: {job_position}, location: {location}, job_description: {job_description}, domain: {domain}')
             item = request.get_json()
             filterObject = FilterClass(
                 item, job_position, location, job_description, domain)
