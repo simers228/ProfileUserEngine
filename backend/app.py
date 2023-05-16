@@ -73,7 +73,6 @@ def recruiter():
             # job_description = user.job_description
             # domain = user.domain
 
-            # SQL connection here?
             myConn = PostgresConnection()
             myConn.connect()
             userList = myConn.selectStatement(
