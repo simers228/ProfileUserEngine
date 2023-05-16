@@ -10,7 +10,6 @@ import subprocess
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from sqlinterface.SQLConnection import PostgresConnection
-from loveSosa import loveSosa
 
 
 app = Flask(__name__)

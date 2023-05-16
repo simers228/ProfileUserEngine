@@ -144,10 +144,10 @@ class PostgresConnection:
         # result = insertRecruiterOptions.insertStatement(
         #     updateTable,  valueList)
         # print(result)
-        # print(returnStmnt)
+        print(returnStmnt)
         return returnStmnt
 
 
 # Sample code to call the SQL connection
-# insertRecruiterOptions = PostgresConnection()  # obfuscate password asap
-# insertRecruiterOptions.main()
+insertRecruiterOptions = PostgresConnection()  # obfuscate password asap
+insertRecruiterOptions.main()
