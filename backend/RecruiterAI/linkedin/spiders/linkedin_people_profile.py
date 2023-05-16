@@ -1,11 +1,9 @@
 import scrapy
 import logging
-import ast
-from flask import Flask
 import requests
 
 
-profile_data = []
+
 response = requests.get('http://localhost:5000/userengine')
 usernames = response.json()
 class LinkedInPeopleProfileSpider(scrapy.Spider):
@@ -22,7 +20,7 @@ class LinkedInPeopleProfileSpider(scrapy.Spider):
             yield scrapy.Request(url=linkedin_people_url, callback=self.parse_profile, meta={'profile': profile, 'linkedin_url': linkedin_people_url})
     
     def store_item(self, item):
-        profile_data.append(item)
+        self.profile_data.append(item)
 
     def parse_profile(self, response):
         item = {}
