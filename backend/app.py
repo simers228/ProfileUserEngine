@@ -53,16 +53,11 @@ def recruiter():
 
             myConn = PostgresConnection()
             myConn.connect()
-            # print(myConn)
             updateTable = 'tbl_recruiteroptions'
             valuesList = [variables.getUser(), job_position,
                           location, job_description, domain]
             myConn.insertStatement(updateTable, valuesList)
             myConn.disconnect()
-            # user = User(job_position=job_position, location=location,
-            #             job_description=job_description, domain=domain)
-            # db.session.add(user)
-            # db.session.commit()
 
             os.chdir('./RecruiterAI/')
             subprocess.Popen(['scrapy', 'crawl', 'linkedin_people_profile'])
