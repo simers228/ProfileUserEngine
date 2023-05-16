@@ -43,7 +43,7 @@ def recruiter():
     if request.method == 'POST':
         if request.headers.get('X-Request-ID') == "User-Input":
             variables = loveSosa()
-            loveSosa.setUser('Calvin5')
+            loveSosa.setUser('Calvin7')
             job_position = request.json.get('jobPosition')
             location = request.json.get('location')
             job_description = request.json.get('jobDescription')
@@ -55,7 +55,7 @@ def recruiter():
             myConn.connect()
             # print(myConn)
             updateTable = 'tbl_recruiteroptions'
-            valuesList = [loveSosa.getUser(), job_position,
+            valuesList = [variables.getUser(), job_position,
                           location, job_description, domain]
             myConn.insertStatement(updateTable, valuesList)
             myConn.disconnect()
@@ -73,7 +73,7 @@ def recruiter():
             myConn.connect()
             # userList = myConn.selectStatement(f"SELECT * FROM tbl_recruiteroptions where charuser = \'{user}\'")
             userList = myConn.selectStatement(
-                f"SELECT * FROM tbl_recruiteroptions where charuser = \'{loveSosa.getUser()}\';")
+                f"SELECT * FROM tbl_recruiteroptions where charuser = \'{variables.getUser()}\';")
 
             myConn.disconnect()
             print("select list return > \n")
