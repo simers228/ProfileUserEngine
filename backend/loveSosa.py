@@ -5,5 +5,5 @@ class loveSosa:
     def getUser(self):
         return self.getUser
 
-    def serUser(self, user):
+    def setUser(self, user):
         self.user = user
