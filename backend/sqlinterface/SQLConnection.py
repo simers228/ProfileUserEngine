@@ -129,17 +129,19 @@ class PostgresConnection:
         insertRecruiterOptions.connect()
         # print(insertRecruiterOptions)
         # result = insertRecruiterOptions.selectStatement('SELECT * from tbl_linkedinexperience;')
-        updateTable = 'tbl_recruiteroptions'
-
-        valueList = ['userTest4', 'positionTest',
-                     'locationTest', 'jobLocationTest', 'domainTest']
-
-        result = insertRecruiterOptions.insertStatement(
-            updateTable,  valueList)
-        print(result)
+        print(self)
         insertRecruiterOptions.disconnect()
 
-        return 'Adding this functionality later'
+        # updateTable = 'tbl_recruiteroptions'
+
+        # valueList = ['userTest4', 'positionTest',
+        #              'locationTest', 'jobLocationTest', 'domainTest']
+
+        # result = insertRecruiterOptions.insertStatement(
+        #     updateTable,  valueList)
+        # print(result)
+
+        return 'Functionality added'
 
 
 # Sample code to call the SQL connection
