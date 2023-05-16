@@ -42,8 +42,7 @@ def recruiter():
     global job_position, location, job_description, domain
     if request.method == 'POST':
         if request.headers.get('X-Request-ID') == "User-Input":
-            variables = loveSosa()
-            loveSosa.setUser('Calvin7')
+            user = request.json.get('user')
             job_position = request.json.get('jobPosition')
             location = request.json.get('location')
             job_description = request.json.get('jobDescription')
@@ -54,7 +53,7 @@ def recruiter():
             myConn = PostgresConnection()
             myConn.connect()
             updateTable = 'tbl_recruiteroptions'
-            valuesList = [variables.getUser(), job_position,
+            valuesList = [user, job_position,
                           location, job_description, domain]
             myConn.insertStatement(updateTable, valuesList)
             myConn.disconnect()
@@ -66,9 +65,8 @@ def recruiter():
         else:
             myConn = PostgresConnection()
             myConn.connect()
-            # userList = myConn.selectStatement(f"SELECT * FROM tbl_recruiteroptions where charuser = \'{user}\'")
             userList = myConn.selectStatement(
-                f"SELECT * FROM tbl_recruiteroptions where charuser = \'{variables.getUser()}\';")
+                f"SELECT * FROM tbl_recruiteroptions where charuser = \'{user}\';")
 
             myConn.disconnect()
             print("select list return > \n")
