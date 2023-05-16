@@ -71,7 +71,7 @@ def recruiter():
             myConn.connect()
             # userList = myConn.selectStatement(f"SELECT * FROM tbl_recruiteroptions where charuser = \'{user}\'")
             userList = myConn.selectStatement(
-                f"SELECT * FROM tbl_recruiteroptions where charuser = \'Calvin3\'")
+                f"SELECT * FROM tbl_recruiteroptions where charuser = \'Calvin3\';")
 
             myConn.disconnect()
             print("select list return > \n")
