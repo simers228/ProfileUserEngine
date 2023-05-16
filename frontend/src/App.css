@@ -9,7 +9,8 @@ body {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  height: 80px;
+  height: 90px;
+  padding-bottom: 20px;
 }
 .container {
   display: flex;
