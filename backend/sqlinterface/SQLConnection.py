@@ -8,12 +8,12 @@ from sqlalchemy.orm import sessionmaker
 
 
 class PostgresConnection:
-    def __init__(self, host, port, database, username, password, sslmode='Require'):
-        self.host = host
-        self.port = port
-        self.database = database
-        self.username = username
-        self.password = password
+    def __init__(self, sslmode='Require'):
+        self.host = 'sequoiapostgres1.postgres.database.azure.com'
+        self.port = 5432
+        self.database = 'seq_app'
+        self.username = 'sequoiauser'
+        self.password = 'Sequoia_2023'
         self.sslmode = sslmode
         self.ssl_root_cert = './DigiCertGlobalRootCA.crt.pem'
 
@@ -22,6 +22,8 @@ class PostgresConnection:
         self.metadata = None
 
     def __str__(self):
+        print(f'host > {self.host}')
+        print(f'database > {self.database}')
         return ('Yes, this works')
 
     def connect(self):
@@ -129,9 +131,8 @@ class PostgresConnection:
         # result = insertRecruiterOptions.selectStatement('SELECT * from tbl_linkedinexperience;')
         updateTable = 'tbl_recruiteroptions'
 
-        valueList = ['userTest', 'positionTest',
+        valueList = ['userTest4', 'positionTest',
                      'locationTest', 'jobLocationTest', 'domainTest']
-        print(f'type of valueList > {type(valueList)}')
 
         result = insertRecruiterOptions.insertStatement(
             updateTable,  valueList)
@@ -142,6 +143,5 @@ class PostgresConnection:
 
 
 # Sample code to call the SQL connection
-insertRecruiterOptions = PostgresConnection(
-    'sequoiapostgres1.postgres.database.azure.com', 5432, 'seq_app', 'sequoiauser', 'Sequoia_2023')  # obfuscate password asap
+insertRecruiterOptions = PostgresConnection()  # obfuscate password asap
 insertRecruiterOptions.main()
