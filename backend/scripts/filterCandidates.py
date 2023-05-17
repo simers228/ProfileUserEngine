@@ -3,12 +3,13 @@ import openai
 import re
 import requests
 class FilterClass:
-    def __init__(self, data_object, jobPosition, location, jobDescription, domain):
+    def __init__(self, data_object, jobPosition, location, jobDescription, domain, prompt):
         self.data_object = data_object
         self.jobPosition = jobPosition
         self.location = location
         self.jobDescription = jobDescription
         self.domain = domain
+        self.prompt = prompt
         openai.organization = "org-5jL307O6H0zk9xntse9BR1sl"
         openai.api_key = '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'
         self.df = pd.DataFrame(self.data_object)

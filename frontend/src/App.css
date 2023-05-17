@@ -60,7 +60,11 @@ body {
 }
 .textbox3 {
   height: 250px;
-  width: 100%;
+  width: 95%;
+}
+.textbox4 {
+  height: 100px;
+  width: 95%;
 }
 .container2 {
   margin: auto;

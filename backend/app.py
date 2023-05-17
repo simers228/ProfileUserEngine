@@ -35,7 +35,6 @@ def signUp():
         print('{username} + {password}')
     return Response(status=204)
 
-
 @app.route('/users')
 def login():
     if request.method == 'POST':
@@ -58,7 +57,7 @@ def login():
 
 @app.route('/userengine', methods=['GET', 'POST'])
 def linkedin():
-    global linkedinUsernames
+    linkedinUsernames = ['brandon-irby-1159b715', 'dave-ramsey-9a40bb4', 'ewcampbell', 'jennifer-kim-b123a61', 'jeremy-hill-b7042813', 'jim-mangelsen-6569842', 'kalika-sinha-3982b418', 'ken-english-837816a7', 'martyreibold', 'mccampbell-bruce-021642a0']
     if request.method == 'POST':
         URL = request.form['linkedinUrl']
         scraper = LinkedInScraper(URL)
@@ -75,14 +74,14 @@ def recruiter():
     global job_position, location, job_description, domain
     if request.method == 'POST':
         if request.headers.get('X-Request-ID') == "User-Input":
-            user = request.json.get('user')
+            user = 'request.json.get'
             job_position = request.json.get('jobPosition')
             location = request.json.get('location')
             job_description = request.json.get('jobDescription')
             domain = request.json.get('domain')
+            prompt = request.json.get('prompt')
             if location == None:
                 location = ""
-
             myConn = PostgresConnection()
             myConn.connect()
             updateTable = 'tbl_recruiteroptions'
@@ -109,7 +108,7 @@ def recruiter():
             #     f'job_position: {job_position}, location: {location}, job_description: {job_description}, domain: {domain}')
             item = request.get_json()
             filterObject = FilterClass(
-                item, job_position, location, job_description, domain)
+                item, job_position, location, job_description, domain, prompt)
             file = filterObject.filter()
             file = file.to_csv
             return send_file(file('outreach.csv'))

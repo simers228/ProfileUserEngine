@@ -3,12 +3,14 @@ import Location from "./location.js";
 import JobPositions from "./jobPositions.js";
 import JobDescription from "./jobDescription";
 import Domain from "./domain.js";
+import Prompt from "./prompt.js";
 
 export default function RecruiterOptions() {
   const [jobPosition, setJobPosition] = useState("");
   const [location, setLocation] = useState("");
   const [domain, setDomain] = useState("");
   const [jobDescription, setJobDescription] = useState("");
+  const [prompt, setPrompt] = useState("");
 
   const handleJobPositionChange = (value) => {
     setJobPosition(value);
@@ -32,6 +34,9 @@ export default function RecruiterOptions() {
       }
       if (domain) {
         requestBody.domain = domain;
+      }
+      if (prompt) {
+        requestBody.prompt = prompt;
       }
       const response = await fetch("http://localhost:5000/recruiter", {
         method: "POST",
@@ -62,6 +67,9 @@ export default function RecruiterOptions() {
       </div>
       <div className="prompts">
         <JobDescription setJobDescription={setJobDescription} />
+      </div>
+      <div className="prompts">
+        <Prompt setPrompt={setPrompt} />
       </div>
       <div className="button2">
         <button id="filterButton" className="button" onClick={handleSubmit}>
