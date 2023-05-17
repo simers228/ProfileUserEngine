@@ -35,6 +35,7 @@ def signUp():
         print('{username} + {password}')
     return Response(status=204)
 
+
 @app.route('/users')
 def login():
     if request.method == 'POST':
@@ -57,7 +58,8 @@ def login():
 
 @app.route('/userengine', methods=['GET', 'POST'])
 def linkedin():
-    linkedinUsernames = ['brandon-irby-1159b715', 'dave-ramsey-9a40bb4', 'ewcampbell', 'jennifer-kim-b123a61', 'jeremy-hill-b7042813', 'jim-mangelsen-6569842', 'kalika-sinha-3982b418', 'ken-english-837816a7', 'martyreibold', 'mccampbell-bruce-021642a0']
+    linkedinUsernames = ['brandon-irby-1159b715', 'dave-ramsey-9a40bb4', 'ewcampbell', 'jennifer-kim-b123a61', 'jeremy-hill-b7042813',
+                         'jim-mangelsen-6569842', 'kalika-sinha-3982b418', 'ken-english-837816a7', 'martyreibold', 'mccampbell-bruce-021642a0']
     if request.method == 'POST':
         URL = request.form['linkedinUrl']
         scraper = LinkedInScraper(URL)
@@ -73,6 +75,7 @@ def linkedin():
 def recruiter():
     global job_position, location, job_description, domain
     if request.method == 'POST':
+        user = 'request.json.get'
         if request.headers.get('X-Request-ID') == "User-Input":
             user = 'request.json.get'
             job_position = request.json.get('jobPosition')
@@ -82,6 +85,8 @@ def recruiter():
             prompt = request.json.get('prompt')
             if location == None:
                 location = ""
+
+            # Create SQL connection to run insert
             myConn = PostgresConnection()
             myConn.connect()
             updateTable = 'tbl_recruiteroptions'
@@ -95,6 +100,7 @@ def recruiter():
             os.chdir('../')
             return Response(status=204)
         else:
+
             myConn = PostgresConnection()
             myConn.connect()
             userList = myConn.selectStatement(
