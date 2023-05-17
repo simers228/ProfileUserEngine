@@ -130,7 +130,7 @@ class PostgresConnection:
         updateTable = 'tbl_users'
 
         now = datetime.datetime.now()
-        valueList = ['aidang2', 'big23', str(now)]
+        valueList = ['aidang3', 'big23', str(datetime.datetime.now())]
 
         result = self.insertStatement(updateTable,  valueList)
 

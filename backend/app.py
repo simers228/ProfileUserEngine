@@ -25,11 +25,19 @@ def login():
     if request.method == 'POST':
         username = request.json.get('username')
         password = request.json.get('password')
+        date = str(datetime.datetime.now())
+
+        tbl_users = 'tbl_users'
+        user_values = [username, password, date]
         myConn = PostgresConnection()
         myConn.connect()
+        myConn.insertStatement(tbl_users, user_values)
+        myConn.disconnect()
 
         print('{username} + {password}')
     return Response(status=204)
+
+
 @app.route('/userengine', methods=['GET', 'POST'])
 def linkedin():
     global linkedinUsernames
@@ -76,7 +84,7 @@ def recruiter():
                 f"SELECT * FROM tbl_recruiteroptions where charuser = \'{user}\';")
 
             myConn.disconnect()
-            print("select list return > \n")
+            print("\n\n\n\nselect list return >> ")
             print(userList)
 
             # print(
