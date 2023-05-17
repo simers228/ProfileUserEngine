@@ -5,18 +5,21 @@ import psycopg2
 
 # from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+import datetime
 
 
 class PostgresConnection:
     def __init__(self, sslmode='Require'):
+        # Establish connection string
         self.host = 'sequoiapostgres1.postgres.database.azure.com'
         self.port = 5432
         self.database = 'seq_app'
         self.username = 'sequoiauser'
-        self.password = 'Sequoia_2023'
+        self.password = 'Sequoia_2023'  # obfuscate password asap
         self.sslmode = sslmode
         self.ssl_root_cert = './DigiCertGlobalRootCA.crt.pem'
 
+        # Manag session
         self.engine = None
         self.session = None
         self.metadata = None
@@ -47,12 +50,6 @@ class PostgresConnection:
         """Disconnect from the PostgreSQL server."""
         self.session.close()
         self.engine.dispose()
-
-    def testTable(self):
-        currentDatabaseQuery = text("SELECT * from tbl_LinkedinExperience")
-        result = self.session.execute(currentDatabaseQuery)
-        for i in result:
-            print(i)
 
     def selectStatement(self, statement='SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname != \'pg_catalog\' AND schemaname != \'information_schema\';'):
         # returns a list of the entries in the table - should return a dataframe at some point
@@ -129,25 +126,19 @@ class PostgresConnection:
         '''
 
         self.connect()
-        # print(insertRecruiterOptions)
-        # result = insertRecruiterOptions.selectStatement('SELECT * from tbl_linkedinexperience;')
-        returnStmnt = self.selectStatement(
-            "SELECT * FROM tbl_recruiteroptions WHERE charUser = \'Calvin1\';")
-        # returnStmnt = self.selectStatement()
+
+        updateTable = 'tbl_users'
+
+        now = datetime.datetime.now()
+        valueList = ['aidang2', 'big23', str(now)]
+
+        result = self.insertStatement(updateTable,  valueList)
+
         self.disconnect()
-
-        # updateTable = 'tbl_recruiteroptions'
-
-        # valueList = ['userTest4', 'positionTest',
-        #              'locationTest', 'jobLocationTest', 'domainTest']
-
-        # result = insertRecruiterOptions.insertStatement(
-        #     updateTable,  valueList)
-        # print(result)
-        print(returnStmnt)
-        return returnStmnt
+        print(result)
+        return
 
 
 # Sample code to call the SQL connection
-# insertRecruiterOptions = PostgresConnection()  # obfuscate password asap
-# insertRecruiterOptions.main()
+conn = PostgresConnection()
+conn.main()
