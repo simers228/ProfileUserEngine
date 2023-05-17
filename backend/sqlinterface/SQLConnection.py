@@ -127,18 +127,25 @@ class PostgresConnection:
 
         self.connect()
 
-        updateTable = 'tbl_users'
+        # updateTable = 'tbl_users'
 
-        now = datetime.datetime.now()
-        valueList = ['aidang3', 'big23', str(datetime.datetime.now())]
+        # now = datetime.datetime.now()
+        # valueList = ['aidang3', 'big23', str(datetime.datetime.now())]
 
-        result = self.insertStatement(updateTable,  valueList)
+        # result = self.insertStatement(updateTable,  valueList)
 
-        self.disconnect()
-        print(result)
-        return
+        # self.disconnect()
+        # print(result)
+        username = 'aidang1'
+
+        result = self.selectStatement(
+            f'SELECT * FROM tbl_users WHERE username = \'{username}\';')
+
+        self.disconnect
+
+        return result
 
 
 # Sample code to call the SQL connection
 conn = PostgresConnection()
-conn.main()
+print(conn.main())
