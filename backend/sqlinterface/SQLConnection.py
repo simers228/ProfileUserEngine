@@ -147,5 +147,5 @@ class PostgresConnection:
 
 
 # Sample code to call the SQL connection
-conn = PostgresConnection()
-print(conn.main())
+# conn = PostgresConnection()
+# print(conn.main())
