@@ -19,6 +19,21 @@ CORS(app, origins=['http://localhost:3000'])
 
 
 # DO NOT FORGET TO ADD TEXT FILTERING TO AVOID INJECTION
+@app.route('/signUp')
+def login():
+    if request.method == 'POST':
+        username = request.json.get('username')
+        password = request.json.get('password')
+        date = str(datetime.datetime.now())
+
+        tbl_users = 'tbl_users'
+        user_values = [username, password, date]
+        myConn = PostgresConnection()
+        myConn.connect()
+        myConn.insertStatement(tbl_users, user_values)
+        myConn.disconnect()
+        print('{username} + {password}')
+    return Response(status=204)
 
 @app.route('/users')
 def login():
@@ -31,7 +46,7 @@ def login():
         user_values = [username, password, date]
         myConn = PostgresConnection()
         myConn.connect()
-        myConn.insertStatement(tbl_users, user_values)
+        myConn.select(tbl_users, user_values)
         myConn.disconnect()
 
         print('{username} + {password}')
