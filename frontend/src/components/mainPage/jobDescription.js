@@ -1,7 +1,19 @@
 import React, { useState } from "react";
 export default function JobDescription({ setJobDescription }) {
+  const [setSelectedFile] = useState(null);
   const handleJobDescriptionChange = (event) => {
     setJobDescription(event.target.value);
+  };
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    setSelectedFile(file);
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const fileContent = e.target.result;
+      setJobDescription(fileContent);
+    };
+    reader.readAsText(file);
   };
   return (
     <div>
@@ -39,6 +51,13 @@ export default function JobDescription({ setJobDescription }) {
           className="textbox3 textbox"
           onChange={handleJobDescriptionChange}
         ></textarea>
+        <input
+          type="file"
+          className="text"
+          name="jobDescriptionFile"
+          accept=".txt"
+          onChange={handleFileUpload}
+        />
       </form>
     </div>
   );

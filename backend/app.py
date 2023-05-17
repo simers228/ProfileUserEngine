@@ -20,19 +20,27 @@ CORS(app, origins=['http://localhost:3000'])
 
 # DO NOT FORGET TO ADD TEXT FILTERING TO AVOID INJECTION
 
+@app.route('/users')
+def login():
+    if request.method == 'POST':
+        username = request.json.get('username')
+        password = request.json.get('password')
+        myConn = PostgresConnection()
+        myConn.connect()
 
+        print('{username} + {password}')
+    return Response(status=204)
 @app.route('/userengine', methods=['GET', 'POST'])
 def linkedin():
-    usernames = ['allisonbentley', 'andrea-wilkins-aa717b151', 'ben-hruban-b18b51b6', 'colin-bailey-a618a622', 'corey-buck-leed-ap-27508910a', 'derrick-hensel-0886996a', 'dustin-parish-a0434468',
-                 'j-d-eickbush-53861456', 'jeremy-just-b0003441', 'jessica-florez-909b15a', 'joe-buelt-68923875', 'jon-timperley-454a2754', 'kendal-fuller-4998b797', 'kevin-sladovnik-12a8a72a', 'shane-rothchild-a18610106']
+    global linkedinUsernames
     if request.method == 'POST':
         URL = request.form['linkedinUrl']
         scraper = LinkedInScraper(URL)
-        usernames = scraper.process()
-        print(usernames)
+        linkedinUsernames = scraper.process()
+        print(linkedinUsernames)
         return Response(status=204)
     elif request.method == 'GET':
-        return jsonify(usernames)
+        return jsonify(linkedinUsernames)
     return Response(status=204)
 
 
@@ -77,7 +85,8 @@ def recruiter():
             filterObject = FilterClass(
                 item, job_position, location, job_description, domain)
             file = filterObject.filter()
-            return send_file(file.to_csv('outreach.csv'))
+            file = file.to_csv
+            return send_file(file('outreach.csv'))
 
 
 @app.route("/")
