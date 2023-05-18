@@ -1,10 +1,3 @@
-command line npm install -g npm
-
-pip install -r requirements.txt
-run start.bat it opens 2 command lines.
-It will open a chrome window.
-Insert link and press button.
-
 ## Steps to install dependencies in a virtual environment
 
 1. Clone this repository to local computer
@@ -24,3 +17,22 @@ Insert link and press button.
 5. Install the dependencies `pip install -r requirements.txt`
 
 6. Install node modules `npm install`
+
+   -Or this: `command line npm install -g npm`
+
+## Best practices to maintain dependencies
+
+- After adding a new python dependency run the freeze script at the .\ProfileUserEngine level to update the requirements.txt
+
+      pip freeze > requirements.txt
+
+- Run python files at the root level to avoid installing multiple `.venv` folders
+  Example to run app.py:
+  `C:Users\user\Sequoia\ProfileUserEngine> python .\backend\app.py`
+
+## Run the repo
+
+- Select start.bat file in Windows explorer
+- Alternatively run python .\backend\app.py
+
+## Test the repo
