@@ -36,3 +36,5 @@
 - Alternatively run python .\backend\app.py
 
 ## Test the repo
+
+- Use `**repr**' to return variables for every class - EXTREMELY helpful for testing
