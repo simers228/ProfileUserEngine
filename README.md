@@ -38,3 +38,7 @@
 ## Test the repo
 
 - Use `**repr**' to return variables for every class - EXTREMELY helpful for testing
+
+## Branches
+
+1. The LinkedInScraper Updates branch is for implementing joeyism linkedin scraper
