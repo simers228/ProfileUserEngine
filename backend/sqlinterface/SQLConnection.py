@@ -56,7 +56,7 @@ class PostgresConnection:
         # Check statement for obvious syntax errors that will cause the SQL to not run
         if (self.errorCheck(statement)):
             # If the error check is true
-
+            self.connect()
             selectQuery = text(statement)
             selectResult = self.session.execute(selectQuery)
             selectReturn = []
@@ -66,6 +66,7 @@ class PostgresConnection:
                 for db in selectResult:
                     selectReturn.append(db[0].strip())
                 # return list of tables available
+                self.disconnect()
                 return 'Choose a table to select from: ' + selectReturn
             else:
                 # custom select statement
@@ -73,6 +74,7 @@ class PostgresConnection:
                     cleaned_line = [col.strip() if isinstance(
                         col, str) else col for col in line]
                     selectReturn.append(cleaned_line)
+                self.disconnect()
                 return selectReturn
 
     def updateStatement(self, statement):

@@ -43,10 +43,8 @@ def login():
         password = request.json.get('password')
 
         myConn = PostgresConnection()
-        myConn.connect()
         result = myConn.selectStatement(
             f'SELECT * FROM tbl_users WHERE username = \'{username}\';')
-        myConn.disconnect()
         if result[1] == password:
             print("password is correct \n")
         else:
@@ -60,6 +58,18 @@ def login():
 def linkedin():
     linkedinUsernames = ['brandon-irby-1159b715', 'dave-ramsey-9a40bb4', 'ewcampbell', 'jennifer-kim-b123a61', 'jeremy-hill-b7042813',
                          'jim-mangelsen-6569842', 'kalika-sinha-3982b418', 'ken-english-837816a7', 'martyreibold', 'mccampbell-bruce-021642a0']
+
+    # Add usernames to the database
+    myConn = PostgresConnection()
+    myConn.connect()
+    updateTable = 'tbl_linkedinusernames'
+    for user in linkedinUsernames:
+        valuesList = []
+        valuesList.append(user)
+        myConn.insertStatement(updateTable, valuesList)
+    myConn.disconnect()
+
+    # Process post
     if request.method == 'POST':
         URL = request.form['linkedinUrl']
         scraper = LinkedInScraper(URL)
