@@ -15,20 +15,3 @@ class tbl_users(db.Model):
 
     def __repr__(self):
         return f"test(id={self.username!r}, name={self.password!r}, fullname={self.created!r})"
-
-
-# # Add to Mapped Base object
-# Base.metadata.create_all(engine)
-
-# # Create session
-# Session = sessionmaker(bind=engine)
-# session = Session()
-
-# # Menu for UrbanBurger
-# insert_tbl_users = tbl_users(username="aidan102", password=123,
-#                              created=datetime.datetime.now())
-
-# # session.begin()
-# session.add(insert_tbl_users)
-# session.commit()
-# # session.close()

@@ -12,11 +12,11 @@ import subprocess
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from sqlalchemy.sql import func
+from sqlalchemy import Column, ForeignKey, Integer, String, DateTime
 # Import user defined SQL classes
 # Goal is to move away from this
 from sql.PostgresCoreConnection import PostgresCoreConnectionClass
 from sql.PostgresFlaskConnection import PostgresFlaskConnectionClass
-from sql.DatabaseSetup import *  # Import all tables
 
 
 # Initialize the connection class
@@ -30,9 +30,6 @@ CORS(app, origins=['http://localhost:3000'])
 
 # Create db object for connection to database through Flask
 db = SQLAlchemy(app)
-
-# Populate db object with our table
-db.create_all()
 
 
 # DO NOT FORGET TO ADD TEXT FILTERING TO AVOID INJECTION
