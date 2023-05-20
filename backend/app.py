@@ -110,13 +110,10 @@ def recruiter():
             os.chdir('../')
             return Response(status=204)
         else:
-
             myConn = PostgresConnection()
-            myConn.connect()
             userList = myConn.selectStatement(
                 f"SELECT * FROM tbl_recruiteroptions where charuser = \'{user}\';")
 
-            myConn.disconnect()
             print("\n\n\n\nselect list return >> ")
             print(userList)
 
