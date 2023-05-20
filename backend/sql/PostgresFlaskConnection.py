@@ -1,4 +1,3 @@
-from app import db
 from sqlalchemy import Column, ForeignKey, Integer, String, DateTime
 
 
