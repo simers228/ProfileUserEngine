@@ -1,4 +1,5 @@
-from flask import Flask, request, Response, jsonify, send_file
+import os
+from flask import Flask, request, Response, jsonify, send_file, url_for, redirect
 from scripts.linkedInScraper import LinkedInScraper
 from scripts.filterCandidates import FilterClass
 # from scrapy.crawler import CrawlerProcess
@@ -7,15 +8,32 @@ from scripts.filterCandidates import FilterClass
 from flask_cors import CORS
 import os
 import subprocess
+
+# SQL Alchemy dependnecies
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-from sqlinterface.SQLConnection import PostgresConnection
+from sqlalchemy.sql import func
+# Import user defined SQL classes
+# Goal is to move away from this
+from sql.PostgresCoreConnection import PostgresCoreConnectionClass
+from sql.PostgresFlaskConnection import PostgresFlaskConnectionClass
+from sql.DatabaseSetup import *  # Import all tables
 
 
+# Initialize the connection class
+flaskConnectionVariables = PostgresFlaskConnectionClass()
+
+# Initialize Flask
 app = Flask(__name__)
-app.config['SECRET_KEY'] = "My Secret Key"
-# app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = flaskConnectionVariables.getConnectionString()
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 CORS(app, origins=['http://localhost:3000'])
+
+# Create db object for connection to database through Flask
+db = SQLAlchemy(app)
+
+# Populate db object with our table
+db.create_all()
 
 
 # DO NOT FORGET TO ADD TEXT FILTERING TO AVOID INJECTION
@@ -26,13 +44,20 @@ def signUp():
         password = request.json.get('password')
         date = str(datetime.datetime.now())
 
+        # Flask DB initialization
+        add_user_stmnt = tbl_users(
+            username=username, password=password, created=date)
+        db.session.add(add_user_stmnt)
+        db.session.commit()
+
+        # SQL Alchemy core implementation using custom wrapper class
         tbl_users = 'tbl_users'
         user_values = [username, password, date]
-        myConn = PostgresConnection()
+        myConn = PostgresCoreConnectionClass()
         myConn.connect()
         myConn.insertStatement(tbl_users, user_values)
         myConn.disconnect()
-        print('{username} + {password}')
+
     return Response(status=204)
 
 
@@ -42,7 +67,7 @@ def login():
         username = request.json.get('username')
         password = request.json.get('password')
 
-        myConn = PostgresConnection()
+        myConn = PostgresCoreConnectionClass()
         result = myConn.selectStatement(
             f'SELECT * FROM tbl_users WHERE username = \'{username}\';')
         if result[1] == password:
@@ -60,7 +85,7 @@ def linkedin():
                          'jim-mangelsen-6569842', 'kalika-sinha-3982b418', 'ken-english-837816a7', 'martyreibold', 'mccampbell-bruce-021642a0']
 
     # Add usernames to the database
-    myConn = PostgresConnection()
+    myConn = PostgresCoreConnectionClass()
     myConn.connect()
     updateTable = 'tbl_linkedinusernames'
     for user in linkedinUsernames:
@@ -96,8 +121,8 @@ def recruiter():
             if location == None:
                 location = ""
 
-            # Create SQL connection to run insert
-            myConn = PostgresConnection()
+            # Create Core SQL connection to run insert
+            myConn = PostgresCoreConnectionClass()
             myConn.connect()
             updateTable = 'tbl_recruiteroptions'
             valuesList = [user, job_position,
@@ -110,7 +135,8 @@ def recruiter():
             os.chdir('../')
             return Response(status=204)
         else:
-            myConn = PostgresConnection()
+            # Core connection
+            myConn = PostgresCoreConnectionClass()
             userList = myConn.selectStatement(
                 f"SELECT * FROM tbl_recruiteroptions where charuser = \'{user}\';")
 

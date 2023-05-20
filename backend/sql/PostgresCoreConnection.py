@@ -8,7 +8,7 @@ from sqlalchemy.orm import sessionmaker
 import datetime
 
 
-class PostgresConnection:
+class PostgresCoreConnectionClass:
     def __init__(self, sslmode='Require'):
         # Establish connection string
         self.host = 'sequoiapostgres1.postgres.database.azure.com'
@@ -117,6 +117,9 @@ class PostgresConnection:
         column_names = [column['name'] for column in columns]
         return column_names
 
+    def getEngine(self):
+        return self.engine
+
     def main(self):
         '''
         # Define the variables in the connection string
@@ -129,15 +132,6 @@ class PostgresConnection:
 
         self.connect()
 
-        # updateTable = 'tbl_users'
-
-        # now = datetime.datetime.now()
-        # valueList = ['aidang3', 'big23', str(datetime.datetime.now())]
-
-        # result = self.insertStatement(updateTable,  valueList)
-
-        # self.disconnect()
-        # print(result)
         username = 'aidang1'
 
         result = self.selectStatement(
