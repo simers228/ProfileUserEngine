@@ -42,3 +42,4 @@
 ## Branches
 
 1. The LinkedInScraper Updates branch is for implementing joeyism linkedin scraper
+2. Test updating something else
