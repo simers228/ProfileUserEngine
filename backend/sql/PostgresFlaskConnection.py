@@ -39,7 +39,7 @@ class PostgresFlaskConnectionClass:
         return self.database
 
 
-if __name__ == '__main__':
-    testFlaskConnection = PostgresFlaskConnection()
-    connectionString = testFlaskConnection.getConnectionString()
-    print(connectionString)
+# if __name__ == '__main__':
+#     testFlaskConnection = PostgresFlaskConnectionClass()
+#     connectionString = testFlaskConnection.getConnectionString()
+#     print(connectionString)

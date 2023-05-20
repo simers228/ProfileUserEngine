@@ -6,7 +6,6 @@ from scripts.filterCandidates import FilterClass
 # from scrapy.utils.project import get_project_settings
 # from RecruiterAI.linkedin.spiders.linkedin_people_profile import LinkedInPeopleProfileSpider
 from flask_cors import CORS
-import os
 import subprocess
 
 # SQL Alchemy dependnecies
