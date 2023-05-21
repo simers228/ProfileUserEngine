@@ -19,7 +19,7 @@ class PostgresCoreConnectionClass:
         self.sslmode = sslmode
         self.ssl_root_cert = './DigiCertGlobalRootCA.crt.pem'
 
-        # Manag session
+        # Manage session
         self.engine = None
         self.session = None
         self.metadata = None
