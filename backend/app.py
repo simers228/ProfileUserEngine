@@ -125,10 +125,15 @@ def recruiter():
                           location, job_description, domain]
             myConn.insertStatement(updateTable, valuesList)
             myConn.disconnect()
-
-            os.chdir('./RecruiterAI/')
-            subprocess.Popen(['scrapy', 'crawl', 'linkedin_people_profile'])
-            os.chdir('../')
+            myConn.connect()
+            result = myConn.selectStatement('SELECT username FROM tbl_linkedinusernames;')
+            myConn.disconnect()
+            linkedinUsernames = [row[0] for row in result]
+            process = CrawlerProcess()
+            spider = MySpider(linkedinUsernames=linkedinUsernames)
+            process.crawl(spider)
+            process.start()
+            process.stop()
             return Response(status=204)
         else:
             # Core connection
@@ -138,9 +143,13 @@ def recruiter():
 
             print("\n\n\n\nselect list return >> ")
             print(userList)
-
-            # print(
-            #     f'job_position: {job_position}, location: {location}, job_description: {job_description}, domain: {domain}')
+            job_position = userList[0][1]
+            location = userList[0][2]
+            job_description = userList[0][3]
+            domain = userList[0][4]
+            prompt = userList[0][5]
+            print("\n\n\n\nselect list return >> ")
+            print(f'job_position: {job_position}, location: {location}, job_description: {job_description}, domain: {domain}')
             item = request.get_json()
             filterObject = FilterClass(
                 item, job_position, location, job_description, domain, prompt)

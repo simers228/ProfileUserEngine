@@ -1,11 +1,12 @@
 import scrapy
 import logging
 import requests
+import sys
 
 
-
-response = requests.get('http://localhost:5000/userengine')
-usernames = response.json()
+usernames = sys.argv[2:]
+print("\n\n\n\nselect list return >> ")
+print(usernames)
 class LinkedInPeopleProfileSpider(scrapy.Spider):
     name = "linkedin_people_profile"
     def __init__(self, *args, **kwargs):
@@ -175,4 +176,5 @@ class LinkedInPeopleProfileSpider(scrapy.Spider):
         self.store_item(item)
         yield item
     def closed(self, reason):
-        requests.post('http://localhost:5000/recruiter', json=self.profile_data, verify=False)
+        return self.profile_data
+        #requests.post('http://localhost:5000/recruiter', json=self.profile_data, verify=False)
