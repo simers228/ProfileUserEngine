@@ -1,8 +1,11 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, DateTime
-from app import db
+from sqlalchemy.ext.declarative import declarative_base
 
 
-class tbl_users(db.Model):
+Base = declarative_base()
+
+
+class tbl_users(Base):
     '''
     class for tbl_users table
     '''
@@ -14,7 +17,7 @@ class tbl_users(db.Model):
     created = Column(DateTime, nullable=False)
 
     def __repr__(self):
-        return f"tbl_users(id={self.username!r}, name={self.password!r}, fullname={self.created!r})"
+        return f"test(id={self.username!r}, name={self.password!r}, fullname={self.created!r})"
 
 
 class tbl_linkedin(Base):

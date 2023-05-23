@@ -1,4 +1,5 @@
 from sqlalchemy import create_engine, Column, ForeignKey, Integer, String, DateTime
+# from test_DatabaseSetup import * # un-comment this for when testing
 from DatabaseSetup import *
 from sqlalchemy.orm import sessionmaker
 
@@ -12,14 +13,16 @@ class PostgresFlaskConnectionClass:
         self.username = 'sequoiauser'
         self.password = 'Sequoia_2023'
 
+        # Creating the connection
         self.connectionString = None
         self.engine = None
         self.session = None
 
+        # For holding query results
+        self.recentSelectResult = None
+
     def __repr__(self):
-        print(f'host > {self.host}')
-        print(f'database > {self.database}')
-        return ('Yes, this works')
+        return ("select result >> ", self.recentSelectResult)
 
     def getConnectionString(self):
         self.connectionString = f'postgresql://{self.username}:{self.password}@{self.host}:{self.port}/{self.database}'
@@ -27,11 +30,11 @@ class PostgresFlaskConnectionClass:
 
     def createSession(self):
         Session = sessionmaker(bind=self.engine)
-        session = Session()
+        self.session = Session()
         return
 
     def createEngine(self):
-        self.engine = create_engine(self.getConnectionString)
+        self.engine = create_engine(self.getConnectionString())
         return
 
     def disconnect(self):
@@ -61,14 +64,19 @@ class PostgresFlaskConnectionClass:
         return self.database
 
     def select(self, tableName):
+        '''
+        Run this to perform a select query
+        Currently only returns the first line in the query
+        '''
         self.createEngine()
         self.createSession()
         result = self.session.query(tableName).first()
         self.disconnect()
+        self.recentSelectResult = result
         return result
 
 
 if __name__ == '__main__':
     testFlaskConnection = PostgresFlaskConnectionClass()
-    testFlaskConnection.getConnectionString()
-    print(testFlaskConnection)
+    result = testFlaskConnection.select(tbl_linkedin)
+    print(result)
