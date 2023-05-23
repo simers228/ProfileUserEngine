@@ -17,7 +17,7 @@ class tbl_users(db.Model):
         return f"tbl_users(id={self.username!r}, name={self.password!r}, fullname={self.created!r})"
 
 
-class tbl_linkedin(Base):
+class tbl_linkedin(db.Model):
     '''
     class for tbl_linkedin table
     '''
