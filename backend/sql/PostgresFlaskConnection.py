@@ -31,8 +31,13 @@ class PostgresFlaskConnectionClass:
         return
 
     def createEngine(self):
-        engine = create_engine(self.getConnectionString)
+        self.engine = create_engine(self.getConnectionString)
         return
+
+    def disconnect(self):
+        """Disconnect from the PostgreSQL server."""
+        self.session.close()
+        self.engine.dispose()
 
     def setHost(self, host):
         self.host = host
@@ -59,6 +64,7 @@ class PostgresFlaskConnectionClass:
         self.createEngine()
         self.createSession()
         result = self.session.query(tableName).first()
+        self.disconnect()
         return result
 
 
