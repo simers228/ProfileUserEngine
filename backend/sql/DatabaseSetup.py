@@ -15,3 +15,18 @@ class tbl_users(db.Model):
 
     def __repr__(self):
         return f"test(id={self.username!r}, name={self.password!r}, fullname={self.created!r})"
+
+
+class tbl_linkedin(db.Model):
+    '''
+    class for tbl_linkedin table
+    '''
+
+    __tablename__ = 'tbl_linkedin'
+
+    username = Column(String, primary_key=True)
+    password = Column(String, nullable=False)
+    created = Column(DateTime, nullable=False)
+
+    def __repr__(self):
+        return f"test(id={self.username!r}, name={self.password!r}, fullname={self.created!r})"

@@ -2,9 +2,9 @@ import os
 from flask import Flask, request, Response, jsonify, send_file, url_for, redirect
 from scripts.linkedInScraper import LinkedInScraper
 from scripts.filterCandidates import FilterClass
-# from scrapy.crawler import CrawlerProcess
+from scrapy.crawler import CrawlerProcess
 # from scrapy.utils.project import get_project_settings
-# from RecruiterAI.linkedin.spiders.linkedin_people_profile import LinkedInPeopleProfileSpider
+from RecruiterAI.linkedin.spiders.linkedin_people_profile import LinkedInPeopleProfileSpider
 from flask_cors import CORS
 import subprocess
 
@@ -126,11 +126,13 @@ def recruiter():
             myConn.insertStatement(updateTable, valuesList)
             myConn.disconnect()
             myConn.connect()
-            result = myConn.selectStatement('SELECT username FROM tbl_linkedinusernames;')
+            result = myConn.selectStatement(
+                'SELECT username FROM tbl_linkedinusernames;')
             myConn.disconnect()
             linkedinUsernames = [row[0] for row in result]
             process = CrawlerProcess()
-            spider = MySpider(linkedinUsernames=linkedinUsernames)
+            spider = LinkedInPeopleProfileSpider(
+                linkedinUsernames=linkedinUsernames)
             process.crawl(spider)
             process.start()
             process.stop()
@@ -149,7 +151,8 @@ def recruiter():
             domain = userList[0][4]
             prompt = userList[0][5]
             print("\n\n\n\nselect list return >> ")
-            print(f'job_position: {job_position}, location: {location}, job_description: {job_description}, domain: {domain}')
+            print(
+                f'job_position: {job_position}, location: {location}, job_description: {job_description}, domain: {domain}')
             item = request.get_json()
             filterObject = FilterClass(
                 item, job_position, location, job_description, domain, prompt)

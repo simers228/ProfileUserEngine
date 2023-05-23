@@ -1,4 +1,6 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, DateTime
+from sqlalchemy import create_engine, Column, ForeignKey, Integer, String, DateTime
+from DatabaseSetup import *
+from sqlalchemy.orm import sessionmaker
 
 
 class PostgresFlaskConnectionClass:
@@ -11,10 +13,26 @@ class PostgresFlaskConnectionClass:
         self.password = 'Sequoia_2023'
 
         self.connectionString = None
+        self.engine = None
+        self.session = None
+
+    def __repr__(self):
+        print(f'host > {self.host}')
+        print(f'database > {self.database}')
+        return ('Yes, this works')
 
     def getConnectionString(self):
         self.connectionString = f'postgresql://{self.username}:{self.password}@{self.host}:{self.port}/{self.database}'
         return self.connectionString
+
+    def createSession(self):
+        Session = sessionmaker(bind=self.engine)
+        session = Session()
+        return
+
+    def createEngine(self):
+        engine = create_engine(self.getConnectionString)
+        return
 
     def setHost(self, host):
         self.host = host
@@ -37,8 +55,14 @@ class PostgresFlaskConnectionClass:
     def getDatabase(self):
         return self.database
 
+    def select(self, tableName):
+        self.createEngine()
+        self.createSession()
+        result = self.session.query(tableName).first()
+        return result
 
-# if __name__ == '__main__':
-#     testFlaskConnection = PostgresFlaskConnectionClass()
-#     connectionString = testFlaskConnection.getConnectionString()
-#     print(connectionString)
+
+if __name__ == '__main__':
+    testFlaskConnection = PostgresFlaskConnectionClass()
+    testFlaskConnection.getConnectionString()
+    print(testFlaskConnection)

@@ -24,7 +24,7 @@ class PostgresCoreConnectionClass:
         self.session = None
         self.metadata = None
 
-    def __str__(self):
+    def __repr__(self):
         print(f'host > {self.host}')
         print(f'database > {self.database}')
         return ('Yes, this works')

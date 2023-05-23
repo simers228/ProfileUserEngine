@@ -23,17 +23,17 @@ SCRAPEOPS_PROXY_ENABLED = True
 
 # Add In The ScrapeOps Monitoring Extension
 EXTENSIONS = {
-'scrapeops_scrapy.extension.ScrapeOpsMonitor': 500, 
+    'scrapeops_scrapy.extension.ScrapeOpsMonitor': 500,
 }
 
 
 DOWNLOADER_MIDDLEWARES = {
 
-    ## ScrapeOps Monitor
+    # ScrapeOps Monitor
     'scrapeops_scrapy.middleware.retry.RetryMiddleware': 550,
     'scrapy.downloadermiddlewares.retry.RetryMiddleware': None,
-    
-    ## Proxy Middleware
+
+    # Proxy Middleware
     'scrapeops_scrapy_proxy_sdk.scrapeops_scrapy_proxy_sdk.ScrapeOpsScrapyProxySdk': 725,
 }
 
@@ -45,4 +45,7 @@ CONCURRENT_REQUESTS_PER_IP = 0
 DOWNLOAD_DELAY = 0.1
 DNSCACHE_SIZE = 20000
 
-
+# Activate pipelines to connect to SQL Database
+ITEM_PIPELINES = {
+    'RecruiteAI.pipelines.LinkedinPipeline': 300,
+}
