@@ -50,6 +50,7 @@ class PostgresCoreConnectionClass:
         """Disconnect from the PostgreSQL server."""
         self.session.close()
         self.engine.dispose()
+        return
 
     def selectStatement(self, statement='SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname != \'pg_catalog\' AND schemaname != \'information_schema\';'):
         # returns a list of the entries in the table - should return a dataframe at some point
