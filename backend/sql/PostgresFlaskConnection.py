@@ -1,6 +1,5 @@
 from sqlalchemy import create_engine, Column, ForeignKey, Integer, String, DateTime
-# from test_DatabaseSetup import * # un-comment this for when testing
-from DatabaseSetup import *
+# from test_DatabaseSetup import *  # un-comment this for when testing
 from sqlalchemy.orm import sessionmaker
 
 
@@ -18,11 +17,8 @@ class PostgresFlaskConnectionClass:
         self.engine = None
         self.session = None
 
-        # For holding query results
-        self.recentSelectResult = None
-
     def __repr__(self):
-        return ("select result >> ", self.recentSelectResult)
+        return ("connection string >> ", self.connectionString)
 
     def getConnectionString(self):
         self.connectionString = f'postgresql://{self.username}:{self.password}@{self.host}:{self.port}/{self.database}'
@@ -37,25 +33,6 @@ class PostgresFlaskConnectionClass:
         self.engine = create_engine(self.getConnectionString())
         return
 
-    def disconnect(self):
-        """Disconnect from the PostgreSQL server."""
-        self.session.close()
-        self.engine.dispose()
-
-    def setHost(self, host):
-        self.host = host
-        return
-
-    def getHost(self):
-        return self.host
-
-    def setPort(self, port):
-        self.port = port
-        return
-
-    def getPort(self):
-        return self.port
-
     def setDatabase(self, database):
         self.database = database
         return
@@ -63,17 +40,20 @@ class PostgresFlaskConnectionClass:
     def getDatabase(self):
         return self.database
 
-    def select(self, tableName):
-        '''
-        Run this to perform a select query
-        Currently only returns the first line in the query
-        '''
+    def getSession(self):
+        return self.session
+
+    def disconnectConnection(self):
+        """Disconnect from the PostgreSQL server."""
+        self.session.close()
+        self.engine.dispose()
+        return
+
+    def startConnection(self):
+        '''Starts the connection by creating a session'''
         self.createEngine()
         self.createSession()
-        result = self.session.query(tableName).first()
-        self.disconnect()
-        self.recentSelectResult = result
-        return result
+        return
 
 
 if __name__ == '__main__':
