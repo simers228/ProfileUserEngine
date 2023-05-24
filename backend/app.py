@@ -123,11 +123,10 @@ def recruiter():
             # Create ORM select statement for tbl_linkinusernames
             ormConn = PostgresFlaskConnectionClass()
             ormConn.startConnection()
-            result = ormConn.getSession().query(tbl_linkedinusernames).all()
+            linkedinUsernames = ormConn.getSession().query(tbl_linkedinusernames).all()
             ormConn.endConnection()
             print('\n\n\n\n\n Type of usernames >> ',
-                  type(result), '\n\n\n\\n\n\n')
-            linkedinUsernames = [row[0] for row in result]
+                  type(linkedinUsernames), '\n\n\n\\n\n\n')
             process = CrawlerProcess()
             spider = LinkedInPeopleProfileSpider(
                 linkedinUsernames=linkedinUsernames)
