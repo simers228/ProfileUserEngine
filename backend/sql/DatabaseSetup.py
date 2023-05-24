@@ -35,3 +35,16 @@ class tbl_linkedin(db.Model):
 
     def __repr__(self):
         return f"tbl_linkedin(profile={self.profile}, url={self.url}, about={self.about}, cvlocation={self.cvlocation}, education={self.education}, firstname={self.firstname}, lastname={self.lastname})"
+
+
+class tbl_linkedinusernames(db.Model):
+    '''
+    class for tbl_linkedinusernames table
+    '''
+
+    __tablename__ = 'tbl_linkedinusernames'
+
+    usernames = Column(String, primary_key=True, nullable=False)
+
+    def __repr__(self):
+        return f"tbl_linkedin(usernames={self.usernames})"

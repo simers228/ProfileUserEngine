@@ -79,7 +79,7 @@ def login():
 def linkedin():
     # Process post
     if request.method == 'POST':
-    # Add usernames to the database
+        # Add usernames to the database
         URL = request.form['linkedinUrl']
         scraper = LinkedInScraper(URL)
         linkedinUsernames = scraper.process()
@@ -119,10 +119,14 @@ def recruiter():
                           location, job_description, domain]
             myConn.insertStatement(updateTable, valuesList)
             myConn.disconnect()
-            myConn.connect()
-            result = myConn.selectStatement(
-                'SELECT username FROM tbl_linkedinusernames;')
-            myConn.disconnect()
+
+            # Create ORM select statement for tbl_linkinusernames
+            ormConn = PostgresFlaskConnectionClass()
+            ormConn.startConnection()
+            result = ormConn.getSession().query(tbl_linkedinusernames).all()
+            ormConn.endConnection()
+            print('\n\n\n\n\n Type of usernames >> ',
+                  type(result), '\n\n\n\\n\n\n')
             linkedinUsernames = [row[0] for row in result]
             process = CrawlerProcess()
             spider = LinkedInPeopleProfileSpider(
@@ -153,6 +157,19 @@ def recruiter():
             file = filterObject.filter()
             file = file.to_csv
             return send_file(file('outreach.csv'))
+
+
+class tbl_linkedinusernames(db.Model):
+    '''
+    class for tbl_linkedinusernames table
+    '''
+
+    __tablename__ = 'tbl_linkedinusernames'
+
+    usernames = Column(String, primary_key=True, nullable=False)
+
+    def __repr__(self):
+        return f"tbl_linkedin(usernames={self.usernames})"
 
 
 @app.route("/")
