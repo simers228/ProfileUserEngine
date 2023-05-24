@@ -1,28 +1,18 @@
 import scrapy
 import logging
-import requests
-import sys
 
-
-usernames = sys.argv[2:]
-print("\n\n\n\nselect list return >> ")
-print(usernames)
 class LinkedInPeopleProfileSpider(scrapy.Spider):
     name = "linkedin_people_profile"
-    def __init__(self, *args, **kwargs):
-        super(LinkedInPeopleProfileSpider, self).__init__(*args, **kwargs)
-        self.profile_data = []
+    def __init__(self, linkedinUsernames):
+        self.linkedinUsernames = linkedinUsernames
 
     def start_requests(self):
         logging.basicConfig(filename='linkedin_people_profile.log', level=logging.INFO, format='%(asctime)s %(levelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
-        for profile in usernames:
+        for profile in self.linkedinUsernames:
             linkedin_people_url = f'https://www.linkedin.com/in/{profile}/' 
             yield scrapy.Request(url=linkedin_people_url, callback=self.parse_profile, meta={'profile': profile, 'linkedin_url': linkedin_people_url})
     
-    def store_item(self, item):
-        self.profile_data.append(item)
-
     def parse_profile(self, response):
         item = {}
         item['profile'] = response.meta['profile']
@@ -173,8 +163,4 @@ class LinkedInPeopleProfileSpider(scrapy.Spider):
                 education['end_time'] = ''
 
             item['education'].append(education)
-        self.store_item(item)
         yield item
-    def closed(self, reason):
-        return self.profile_data
-        #requests.post('http://localhost:5000/recruiter', json=self.profile_data, verify=False)
