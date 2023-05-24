@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine, Column, ForeignKey, Integer, String, DateTime
-from test_DatabaseSetup import *  # un-comment this for when testing
+# from test_DatabaseSetup import *  # un-comment this for testing
 from sqlalchemy.orm import sessionmaker
 
 
