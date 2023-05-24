@@ -42,10 +42,10 @@ CONCURRENT_ITEMS = 200
 CONCURRENT_REQUESTS = 50
 CONCURRENT_REQUESTS_PER_DOMAIN = 30
 CONCURRENT_REQUESTS_PER_IP = 0
-DOWNLOAD_DELAY = 0.1
+DOWNLOAD_DELAY = 0.2
 DNSCACHE_SIZE = 20000
 
 # Activate pipelines to connect to SQL Database
 ITEM_PIPELINES = {
-    'RecruiteAI.pipelines.LinkedinPipeline': 300,
+    'RecruiterAI.pipelines.LinkedinPipeline': 300,
 }

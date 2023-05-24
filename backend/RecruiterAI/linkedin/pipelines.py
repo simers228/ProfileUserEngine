@@ -3,10 +3,11 @@ import sqlalchemy
 import sys
 import os
 from itemadapter import ItemAdapter
+from sqlalchemy.orm import sessionmaker
 
 sys.path.append(os.path.dirname(__file__)[0: 50])
-from backend.sql.PostgresFlaskConnection import PostgresFlaskConnectionClass
-from backend.sql.DatabaseSetup import *
+from sql.PostgresFlaskConnection import PostgresFlaskConnectionClass
+from sql.DatabaseSetup import *
 # Put backend imports here
 
 

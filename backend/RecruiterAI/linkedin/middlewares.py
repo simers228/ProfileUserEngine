@@ -103,10 +103,3 @@ class LinkedinDownloaderMiddleware:
         spider.logger.info('Spider opened: %s' % spider.name)
 
 import random
-
-
-
-
-
-
-

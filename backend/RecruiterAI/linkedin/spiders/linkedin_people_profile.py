@@ -3,16 +3,14 @@ import logging
 
 class LinkedInPeopleProfileSpider(scrapy.Spider):
     name = "linkedin_people_profile"
-    def __init__(self, linkedinUsernames):
+    def __init__(self, linkedinUsernames='', **kwargs): # The category variable will have the input URL.
+        super().__init__(**kwargs)
         self.linkedinUsernames = linkedinUsernames
-
     def start_requests(self):
         logging.basicConfig(filename='linkedin_people_profile.log', level=logging.INFO, format='%(asctime)s %(levelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
-
         for profile in self.linkedinUsernames:
             linkedin_people_url = f'https://www.linkedin.com/in/{profile}/' 
             yield scrapy.Request(url=linkedin_people_url, callback=self.parse_profile, meta={'profile': profile, 'linkedin_url': linkedin_people_url})
-    
     def parse_profile(self, response):
         item = {}
         item['profile'] = response.meta['profile']
@@ -147,7 +145,6 @@ class LinkedInPeopleProfileSpider(scrapy.Spider):
                 print("education --> description", e)
                 education['description'] = ''
 
-         
             ## time range
             try:
                 date_ranges = block.css('span.date-range time::text').getall()

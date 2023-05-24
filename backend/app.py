@@ -1,13 +1,11 @@
-import os
-from flask import Flask, request, Response, jsonify, send_file, url_for, redirect
+from flask import Flask, request, Response, send_file
 from scripts.linkedInScraper import LinkedInScraper
 from scripts.filterCandidates import FilterClass
 from scrapy.crawler import CrawlerProcess
-# from scrapy.utils.project import get_project_settings
+from scrapy.utils.project import get_project_settings
 from RecruiterAI.linkedin.spiders.linkedin_people_profile import LinkedInPeopleProfileSpider
 from flask_cors import CORS
-import subprocess
-
+from twisted.internet import reactor
 # SQL Alchemy dependnecies
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
@@ -125,21 +123,42 @@ def recruiter():
             ormConn.startConnection()
             linkedinUsernames = ormConn.getSession().query(tbl_linkedinusernames).all()
             ormConn.endConnection()
-            print('\n\n\n\n\n Type of usernames >> ',
-                  type(linkedinUsernames), '\n\n\n\\n\n\n')
-            process = CrawlerProcess()
-            spider = LinkedInPeopleProfileSpider(
-                linkedinUsernames=linkedinUsernames)
-            process.crawl(spider)
-            process.start()
-            process.stop()
-            return Response(status=204)
-        else:
-            # Core connection
+            usernames = []
+            for user in linkedinUsernames:
+                username = user.usernames
+                usernames.append(username)
+            settings = {
+                'BOT_NAME': 'linkedin_people_profile',
+                'SPIDER_MODULES': ['RecruiterAI.linkedin.spiders'],
+                'NEWSPIDER_MODULE': 'RecruiterAI.linkedin.spiders',
+                'ROBOTSTXT_OBEY': False,
+                'SCRAPEOPS_API_KEY': 'faf287be-5b12-4b97-87e8-f0cc3d35c657',
+                'SCRAPEOPS_PROXY_ENABLED': True,
+                'EXTENSIONS': {
+                    'scrapeops_scrapy.extension.ScrapeOpsMonitor': 500,
+                },
+                'DOWNLOADER_MIDDLEWARES': {
+                    'scrapeops_scrapy.middleware.retry.RetryMiddleware': 550,
+                    'scrapy.downloadermiddlewares.retry.RetryMiddleware': None,
+                    'scrapeops_scrapy_proxy_sdk.scrapeops_scrapy_proxy_sdk.ScrapeOpsScrapyProxySdk': 725,
+                },
+                'CONCURRENT_ITEMS': 200,
+                'CONCURRENT_REQUESTS': 50,
+                'CONCURRENT_REQUESTS_PER_DOMAIN': 30,
+                'CONCURRENT_REQUESTS_PER_IP': 0,
+                'DOWNLOAD_DELAY': 0.2,
+                'DNSCACHE_SIZE': 20000,
+                'ITEM_PIPELINES': {
+                    'RecruiterAI.linkedin.pipelines.LinkedinPipeline': 300,
+                },
+            }
+            process = CrawlerProcess(settings)
+            process.crawl(LinkedInPeopleProfileSpider, usernames)
+            process.start
+            reactor.run()
             myConn = PostgresCoreConnectionClass()
             userList = myConn.selectStatement(
                 f"SELECT * FROM tbl_recruiteroptions where charuser = \'{user}\';")
-
             print("\n\n\n\nselect list return >> ")
             print(userList)
             job_position = userList[0][1]
@@ -147,7 +166,7 @@ def recruiter():
             job_description = userList[0][3]
             domain = userList[0][4]
             prompt = userList[0][5]
-            print("\n\n\n\nselect list return >> ")
+            print("\n\n\n\n")
             print(
                 f'job_position: {job_position}, location: {location}, job_description: {job_description}, domain: {domain}')
             item = request.get_json()
@@ -156,6 +175,7 @@ def recruiter():
             file = filterObject.filter()
             file = file.to_csv
             return send_file(file('outreach.csv'))
+            # Core connection
 
 
 class tbl_linkedinusernames(db.Model):

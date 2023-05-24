@@ -1,5 +1,5 @@
 import scrapy
-from linkedin.items import QuoteItem
+from RecruiterAI.linkedin.items import LinkedinItem
 
 
 class LinkedinSpider(scrapy.Spider):
@@ -11,7 +11,7 @@ class LinkedinSpider(scrapy.Spider):
 
     def parse(self, response):
         # rename based on what we're actually calling
-        tbl_linkedin_object = QuoteItem()
+        tbl_linkedin_object = LinkedinItem()
         for quote in response.css('div.quote'):
             tbl_linkedin_object['profile'] = quote.css('span.text::text').get()
 

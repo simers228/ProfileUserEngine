@@ -59,6 +59,6 @@ class PostgresFlaskConnectionClass:
 if __name__ == '__main__':
     testFlaskConnection = PostgresFlaskConnectionClass()
     testFlaskConnection.startConnection()
-    result = testFlaskConnection.getSession().query(tbl_linkedin).all()
+    result = testFlaskConnection.getSession().query('tbl_linkedin').all()
     testFlaskConnection.endConnection()
     print(result)
