@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine, Column, ForeignKey, Integer, String, DateTime
-# from test_DatabaseSetup import *  # un-comment this for when testing
+from test_DatabaseSetup import *  # un-comment this for when testing
 from sqlalchemy.orm import sessionmaker
 
 
@@ -43,7 +43,7 @@ class PostgresFlaskConnectionClass:
     def getSession(self):
         return self.session
 
-    def disconnectConnection(self):
+    def endConnection(self):
         """Disconnect from the PostgreSQL server."""
         self.session.close()
         self.engine.dispose()
@@ -58,5 +58,7 @@ class PostgresFlaskConnectionClass:
 
 if __name__ == '__main__':
     testFlaskConnection = PostgresFlaskConnectionClass()
-    result = testFlaskConnection.select(tbl_linkedin)
+    testFlaskConnection.startConnection()
+    result = testFlaskConnection.getSession().query(tbl_linkedin).all()
+    testFlaskConnection.endConnection()
     print(result)
