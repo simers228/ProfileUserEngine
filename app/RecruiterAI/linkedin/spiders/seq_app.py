@@ -1,6 +1,5 @@
 import scrapy
-from RecruiterAI.linkedin.items import LinkedinItem
-
+from ..items import LinkedinItem
 
 class LinkedinSpider(scrapy.Spider):
     name = 'seq_app'

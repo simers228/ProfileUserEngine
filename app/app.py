@@ -1,6 +1,6 @@
 from flask import Flask, request, Response, send_file
-from scripts.linkedInScraper import LinkedInScraper
-from scripts.filterCandidates import FilterClass
+from .scripts.linkedInScraper import LinkedInScraper
+from .scripts.filterCandidates import FilterClass
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
 from RecruiterAI.linkedin.spiders.linkedin_people_profile import LinkedInPeopleProfileSpider
@@ -13,8 +13,8 @@ from sqlalchemy.sql import func
 from sqlalchemy import Column, ForeignKey, Integer, String, DateTime
 # Import user defined SQL classes
 # Goal is to move away from this
-from sql.PostgresCoreConnection import PostgresCoreConnectionClass
-from sql.PostgresFlaskConnection import PostgresFlaskConnectionClass
+from .sql.PostgresCoreConnection import PostgresCoreConnectionClass
+from .sql.PostgresFlaskConnection import PostgresFlaskConnectionClass
 
 
 # Initialize the connection class
@@ -190,11 +190,9 @@ class tbl_linkedinusernames(db.Model):
     def __repr__(self):
         return f"tbl_linkedin(usernames={self.usernames})"
 
-
 @app.route("/")
 def homepage():
     return "hi"
-
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -23,7 +23,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # ignore virtual environment
-\venv
+.venv
 *.jsonl
 *.jsonl
 *.pyc
