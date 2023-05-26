@@ -5,11 +5,9 @@ import os
 from itemadapter import ItemAdapter
 from sqlalchemy.orm import sessionmaker
 
-sys.path.append(os.path.dirname(__file__)[0: 50])
-from sql.PostgresFlaskConnection import PostgresFlaskConnectionClass
+from sql import PostgresFlaskConnectionClass
 from sql.DatabaseSetup import *
 # Put backend imports here
-
 
 class LinkedinPipeline(PostgresFlaskConnectionClass):
     def __init__(self):

@@ -3,11 +3,13 @@ import logging
 
 class LinkedInPeopleProfileSpider(scrapy.Spider):
     name = "linkedin_people_profile"
-    def __init__(self, linkedinUsernames='', **kwargs): # The category variable will have the input URL.
-        super().__init__(**kwargs)
-        self.linkedinUsernames = linkedinUsernames
+    custom_settings = {
+        'FEEDS': { 'data/%(name)s_%(time)s.jsonl': { 'format': 'jsonlines',}}
+    }
     def start_requests(self):
         logging.basicConfig(filename='linkedin_people_profile.log', level=logging.INFO, format='%(asctime)s %(levelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+        self.linkedinUsernames = ['brandon-irby-1159b715', 'dave-ramsey-9a40bb4', 'ewcampbell', 'jennifer-kim-b123a61', 'jeremy-hill-b7042813', 'jim-mangelsen-6569842', 'kalika-sinha-3982b418', 'ken-english-837816a7', 'martyreibold', 'mccampbell-bruce-021642a0']
+        print(self.linkedinUsernames)
         for profile in self.linkedinUsernames:
             linkedin_people_url = f'https://www.linkedin.com/in/{profile}/' 
             yield scrapy.Request(url=linkedin_people_url, callback=self.parse_profile, meta={'profile': profile, 'linkedin_url': linkedin_people_url})
@@ -41,7 +43,6 @@ class LinkedInPeopleProfileSpider(scrapy.Spider):
                 item['followers'] = span_text.replace(' followers', '').strip()
             if 'connections' in span_text:
                 item['connections'] = span_text.replace(' connections', '').strip()
-
 
         """
             ABOUT SECTION

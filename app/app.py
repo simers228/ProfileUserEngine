@@ -3,7 +3,7 @@ from .scripts.linkedInScraper import LinkedInScraper
 from .scripts.filterCandidates import FilterClass
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
-from RecruiterAI.linkedin.spiders.linkedin_people_profile import LinkedInPeopleProfileSpider
+from .scraper.run_scraper import ScraperClass
 from flask_cors import CORS
 from twisted.internet import reactor
 # SQL Alchemy dependnecies
@@ -127,36 +127,8 @@ def recruiter():
             for user in linkedinUsernames:
                 username = user.usernames
                 usernames.append(username)
-            settings = {
-                'BOT_NAME': 'linkedin_people_profile',
-                'SPIDER_MODULES': ['RecruiterAI.linkedin.spiders'],
-                'NEWSPIDER_MODULE': 'RecruiterAI.linkedin.spiders',
-                'ROBOTSTXT_OBEY': False,
-                'SCRAPEOPS_API_KEY': 'faf287be-5b12-4b97-87e8-f0cc3d35c657',
-                'SCRAPEOPS_PROXY_ENABLED': True,
-                'EXTENSIONS': {
-                    'scrapeops_scrapy.extension.ScrapeOpsMonitor': 500,
-                },
-                'DOWNLOADER_MIDDLEWARES': {
-                    'scrapeops_scrapy.middleware.retry.RetryMiddleware': 550,
-                    'scrapy.downloadermiddlewares.retry.RetryMiddleware': None,
-                    'scrapeops_scrapy_proxy_sdk.scrapeops_scrapy_proxy_sdk.ScrapeOpsScrapyProxySdk': 725,
-                },
-                'CONCURRENT_ITEMS': 200,
-                'CONCURRENT_REQUESTS': 50,
-                'CONCURRENT_REQUESTS_PER_DOMAIN': 30,
-                'CONCURRENT_REQUESTS_PER_IP': 0,
-                'DOWNLOAD_DELAY': 0.2,
-                'DNSCACHE_SIZE': 20000,
-                'ITEM_PIPELINES': {
-                    'RecruiterAI.linkedin.pipelines.LinkedinPipeline': 300,
-                },
-            }
-            process = CrawlerProcess(settings)
-            process.crawl(LinkedInPeopleProfileSpider, usernames)
-            process.start
-            reactor.run()
-            myConn = PostgresCoreConnectionClass()
+            scraper = ScraperClass()
+            scraper.run_spiders()
             userList = myConn.selectStatement(
                 f"SELECT * FROM tbl_recruiteroptions where charuser = \'{user}\';")
             print("\n\n\n\nselect list return >> ")

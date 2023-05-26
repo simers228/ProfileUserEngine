@@ -1,16 +1,14 @@
-# Scrapy settings for linkedin project
-#
-# For simplicity, this file contains only settings considered important or
-# commonly used. You can find more settings consulting the documentation:
-#
-#     https://docs.scrapy.org/en/latest/topics/settings.html
-#     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-#     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
+from . import spiders
+from . import pipelines
 
-BOT_NAME = 'linkedin'
+def get_full_package_name_for_class(clazz) -> str:
+    return ".".join([clazz.__module__, clazz.__name__])
 
-SPIDER_MODULES = ['linkedin.spiders']
-NEWSPIDER_MODULE = 'linkedin.spiders'
+BOT_NAME = 'linkedin_people_profile'
+
+SPIDER_MODULES = [spiders.__name__]
+NEWSPIDER_MODULE = spiders.__name__
+
 
 # HTTPCACHE_ENABLED = True
 
@@ -47,5 +45,5 @@ DNSCACHE_SIZE = 20000
 
 # Activate pipelines to connect to SQL Database
 ITEM_PIPELINES = {
-    'RecruiterAI.pipelines.LinkedinPipeline': 300,
+    get_full_package_name_for_class(pipelines.LinkedinPipeline): 300,
 }

@@ -1,5 +1,5 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, DateTime
-from app import db
+from ..app import db
 
 
 class tbl_users(db.Model):
