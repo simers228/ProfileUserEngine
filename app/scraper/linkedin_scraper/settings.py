@@ -15,8 +15,6 @@ NEWSPIDER_MODULE = spiders.__name__
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
 
-SCRAPEOPS_API_KEY = 'faf287be-5b12-4b97-87e8-f0cc3d35c657'
-
 SCRAPEOPS_PROXY_ENABLED = True
 
 # Add In The ScrapeOps Monitoring Extension
